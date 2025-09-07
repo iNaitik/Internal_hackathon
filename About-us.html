@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropPriceConnect</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: rgb(26, 42, 56);
+    color: white;
+    padding: 1em;
+    text-align: center;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+header nav ul li {
+    margin-right: 20px;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+}
+
+.hero {
+    background-image: linear-gradient(to bottom, rgb(26, 42, 56), #333);
+    color: white;
+    padding: 5em;
+    text-align: center;
+}
+
+.mission, .vision, .services, .why-us, .commitment {
+    padding: 2em;
+    margin-bottom: 1em;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: rgb(26, 42, 56);
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+ul li::before {
+    content: "\2022";
+    color: rgb(26, 42, 56);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Welcome to CropPriceConnect</h1>
+            <p>Empowering Farmers with Real-Time Crop Pricing Solutions</p>
+        </section>
+
+        <section class="mission">
+            <h2>Our Mission</h2>
+            <p>We aim to provide real-time crop price data, minimize price volatility, and foster transparency in agricultural markets.</p>
+        </section>
+
+        <section class="vision">
+            <h2>Our Vision</h2>
+            <p>We envision a world where farmers thrive economically, supported by reliable pricing information and innovative solutions.</p>
+        </section>
+
+        <section class="services">
+            <h2>What We Offer</h2>
+            <ul>
+                <li>Real-Time Crop Pricing</li>
+                <li>Market Insights</li>
+                <li>Weather Updates</li>
+                <li>Educational Resources</li>
+                <li>Community Support</li>
+            </ul>
+        </section>
+
+        <section class="why-us">
+            <h2>Why CropPriceConnect?</h2>
+            <p>Farmers often face challenges such as price exploitation and limited access to credit. We are here to solve these problems by offering a centralized platform that simplifies access to critical data.</p>
+        </section>
+
+        <section class="commitment">
+            <h2>Our Commitment</h2>
+            <p>We are committed to supporting farmers at every step of their journey, helping them navigate market fluctuations with confidence.</p>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const currentTime = new Date().getHours();
+    const greetingElement = document.createElement('p');
+    
+    if (currentTime < 12) {
+        greetingElement.textContent = "Good morning!";
+    } else if (currentTime < 18) {
+        greetingElement.textContent = "Good afternoon!";
+    } else {
+        greetingElement.textContent = "Good evening!";
+    }
+    
+    document.querySelector('.hero').appendChild(greetingElement);
+});
+
+    </script>
+</body>
+</html>

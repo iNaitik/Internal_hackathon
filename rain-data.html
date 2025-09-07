@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Rainfall Data Table</title>
+ <style>
+  body {
+      font-family: system-ui, -apple-system, Arial, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, rgb(26, 42, 56), rgb(44, 62, 80));
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    
+    h2 {
+      margin: 0;
+      padding: 1.5rem;
+      font-size: 3rem; 
+      font-weight: bold;
+      text-align: left; 
+      color: #ffffff;
+      background-color: rgba(26, 42, 56, 0.9);
+      border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px 8px 0 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      letter-spacing: 1px;
+      
+      top: 0;
+      z-index: 2;
+    }
+
+    /* Search container styling */
+    .search-container {
+      margin: 1.5rem 0;
+      position: relative;
+    }
+
+    /* Input field styling */
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      box-sizing: border-box;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background-color: #ffffff;
+      color: rgb(26, 42, 56);
+      
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3), 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Table container styling */
+    .table-container {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      background-color: #ffffff;
+      margin-bottom: 2rem;
+    }
+
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #ffffff;
+      color: rgb(26, 42, 56);
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+    }
+
+    th {
+      background-color: rgb(26, 42, 56);
+      color: #ffffff;
+      cursor: pointer;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      transition: background-color 0.2s ease;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    th:hover {
+      background-color: rgb(44, 62, 80);
+    }
+
+    /* Zebra striping for table rows */
+    tr:nth-child(even) {
+      background-color: rgba(240, 247, 255, 0.8);
+    }
+
+    tr:hover {
+      background-color: rgba(74, 144, 226, 0.1);
+    }
+
+    td {
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    /* Responsive table styling */
+    @media screen and (max-width: 768px) {
+      h2 {
+        font-size: 2.5rem;
+        padding: 1rem;
+      }
+      
+      .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      th, td {
+        min-width: 120px;
+        padding: 0.75rem;
+      }
+    }
+</style>
+</head>
+<body>
+ <div class="container">
+   <h2>Rainfall Data Table</h2>
+   
+   <div class="search-container">
+     <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for districts...">
+   </div>
+   
+   <div class="table-container">
+     <table id="rainfallTable">
+      <thead>
+       <tr>
+        <th onclick="sortTable(0)">District</th>
+        <th onclick="sortTable(1)">Winter</th>
+        <th onclick="sortTable(2)">Pre-Monsoon</th>
+        <th onclick="sortTable(3)">SW Monsoon</th>
+        <th onclick="sortTable(4)">Post Monsoon</th>
+        <th onclick="sortTable(5)">Annual</th>
+       </tr>
+      </thead>
+      <tbody>
+       <tr>
+        <td>Agar</td>
+        <td>10</td>
+        <td>20</td>
+        <td>900</td>
+        <td>15</td>
+        <td>945</td>
+       </tr>
+       <tr>
+        <td>Alirajpur</td>
+        <td>8</td>
+        <td>18</td>
+        <td>850</td>
+        <td>12</td>
+        <td>888</td>
+       </tr>
+       <tr>
+        <td>Ashoknagar</td>
+        <td>12</td>
+        <td>22</td>
+        <td>950</td>
+        <td>18</td>
+        <td>1002</td>
+       </tr>
+       <tr>
+        <td>Barwani</td>
+        <td>7</td>
+        <td>15</td>
+        <td>750</td>
+        <td>10</td>
+        <td>782</td>
+       </tr>
+       <tr>
+        <td>Betul</td>
+        <td>11</td>
+        <td>21</td>
+        <td>920</td>
+        <td>16</td>
+        <td>968</td>
+       </tr>
+       <tr>
+        <td>Bhind</td>
+        <td>9</td>
+        <td>19</td>
+        <td>800</td>
+        <td>14</td>
+        <td>842</td>
+       </tr>
+       <tr>
+        <td>Bhopal</td>
+        <td>13</td>
+        <td>23</td>
+        <td>980</td>
+        <td>19</td>
+        <td>1035</td>
+       </tr>
+       <tr>
+        <td>Burhanpur</td>
+        <td>6</td>
+        <td>14</td>
+        <td>700</td>
+        <td>9</td>
+        <td>729</td>
+       </tr>
+       <tr>
+        <td>Datia</td>
+        <td>10</td>
+        <td>20</td>
+        <td>910</td>
+        <td>15</td>
+        <td>955</td>
+       </tr>
+       <tr>
+        <td>Dewas</td>
+        <td>8</td>
+        <td>18</td>
+        <td>860</td>
+        <td>12</td>
+        <td>898</td>
+       </tr>
+       <tr>
+        <td>Dhar</td>
+        <td>12</td>
+        <td>22</td>
+        <td>960</td>
+        <td>18</td>
+        <td>1012</td>
+       </tr>
+       <tr>
+        <td>Guna</td>
+        <td>7</td>
+        <td>15</td>
+        <td>760</td>
+        <td>10</td>
+        <td>792</td>
+       </tr>
+       <tr>
+        <td>Gwalior</td>
+        <td>11</td>
+        <td>21</td>
+        <td>930</td>
+        <td>16</td>
+        <td>978</td>
+       </tr>
+       <tr>
+        <td>Harda</td>
+        <td>9</td>
+        <td>19</td>
+        <td>810</td>
+        <td>14</td>
+        <td>852</td>
+       </tr>
+       <tr>
+        <td>Hoshangabad</td>
+        <td>13</td>
+        <td>23</td>
+        <td>990</td>
+        <td>19</td>
+        <td>1045</td>
+       </tr>
+       <tr>
+        <td>Indore</td>
+        <td>6</td>
+        <td>14</td>
+        <td>710</td>
+        <td>9</td>
+        <td>739</td>
+       </tr>
+       <tr>
+        <td>Jhabua</td>
+        <td>10</td>
+        <td>20</td>
+        <td>920</td>
+        <td>15</td>
+        <td>965</td>
+       </tr>
+       <tr>
+        <td>Khandwa</td>
+        <td>8</td>
+        <td>18</td>
+        <td>870</td>
+        <td>12</td>
+        <td>908</td>
+       </tr>
+       <tr>
+        <td>Khargone</td>
+        <td>12</td>
+        <td>22</td>
+        <td>970</td>
+        <td>18</td>
+        <td>1022</td>
+       </tr>
+       <tr>
+        <td>Mandsaur</td>
+        <td>7</td>
+        <td>15</td>
+        <td>770</td>
+        <td>10</td>
+        <td>802</td>
+       </tr>
+       <tr>
+        <td>Morena</td>
+        <td>11</td>
+        <td>21</td>
+        <td>940</td>
+        <td>16</td>
+        <td>988</td>
+       </tr>
+       <tr>
+        <td>Neemuch</td>
+        <td>9</td>
+        <td>19</td>
+        <td>820</td>
+        <td>14</td>
+        <td>862</td>
+       </tr>
+       <tr>
+        <td>Raigarh</td>
+        <td>13</td>
+        <td>23</td>
+        <td>1000</td>
+        <td>19</td>
+        <td>1055</td>
+       </tr>
+       <tr>
+        <td>Raisen</td>
+        <td>6</td>
+        <td>14</td>
+        <td>720</td>
+        <td>9</td>
+        <td>749</td>
+       </tr>
+       <tr>
+        <td>Ratlam</td>
+        <td>10</td>
+        <td>20</td>
+        <td>930</td>
+        <td>15</td>
+        <td>975</td>
+       </tr>
+       <tr>
+        <td>Sehore</td>
+        <td>8</td>
+        <td>18</td>
+        <td>880</td>
+        <td>12</td>
+        <td>918</td>
+       </tr>
+       <tr>
+        <td>Shajapur</td>
+        <td>12</td>
+        <td>22</td>
+        <td>980</td>
+        <td>18</td>
+        <td>1032</td>
+       </tr>
+       <tr>
+        <td>Sheopur</td>
+        <td>7</td>
+        <td>15</td>
+        <td>780</td>
+        <td>10</td>
+        <td>812</td>
+       </tr>
+       <tr>
+        <td>Shivpuri</td>
+        <td>11</td>
+        <td>21</td>
+        <td>950</td>
+        <td>16</td>
+        <td>998</td>
+       </tr>
+       <tr>
+        <td>Ujjain</td>
+        <td>9</td>
+        <td>19</td>
+        <td>830</td>
+        <td>14</td>
+        <td>872</td>
+       </tr>
+       <tr>
+        <td>Vidisha</td>
+        <td>13</td>
+        <td>23</td>
+        <td>1010</td>
+        <td>19</td>
+        <td>1065</td>
+       </tr>
+       <tr>
+        <td>Sub Division West M.P.</td>
+        <td>6</td>
+        <td>14</td>
+        <td>730</td>
+        <td>9</td>
+        <td>759</td>
+       </tr>
+      </tbody>
+     </table>
+   </div>
+ </div>
+ 
+ <script>
+  function sortTable(n) {
+   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+   table = document.getElementById("rainfallTable");
+   switching = true;
+   dir = "asc";
+   
+   // Add sorting indicator
+   var headers = table.getElementsByTagName("th");
+   for (i = 0; i < headers.length; i++) {
+     // Clear existing indicators
+     headers[i].innerHTML = headers[i].innerHTML.replace(' ↑', '').replace(' ↓', '');
+   }
+   
+   while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+     shouldSwitch = false;
+     x = rows[i].getElementsByTagName("TD")[n];
+     y = rows[i + 1].getElementsByTagName("TD")[n];
+     
+     // Check if the two rows should switch
+     if (n === 0) {
+       // For text columns (like District name)
+       if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+         shouldSwitch = true;
+         break;
+        }
+       } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+         shouldSwitch = true;
+         break;
+        }
+       }
+     } else {
+       // For numeric columns
+       if (dir == "asc") {
+        if (Number(x.innerHTML) > Number(y.innerHTML)) {
+         shouldSwitch = true;
+         break;
+        }
+       } else if (dir == "desc") {
+        if (Number(x.innerHTML) < Number(y.innerHTML)) {
+         shouldSwitch = true;
+         break;
+        }
+       }
+     }
+    }
+    
+    if (shouldSwitch) {
+     rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+     switching = true;
+     switchcount++;
+    } else {
+     if (switchcount == 0 && dir == "asc") {
+      dir = "desc";
+      switching = true;
+     }
+    }
+   }
+   
+   // Add sorting indicator to the header
+   if (dir == "desc") {
+     headers[n].innerHTML += " ↓";
+   } else {
+     headers[n].innerHTML += " ↑";
+   }
+  }
+  
+  function searchTable() {
+   var input, filter, table, tr, td, i, txtValue;
+   input = document.getElementById("searchInput");
+   filter = input.value.toUpperCase();
+   table = document.getElementById("rainfallTable");
+   tr = table.getElementsByTagName("tr");
+   
+   for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+     txtValue = td.textContent || td.innerText;
+     if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      tr[i].style.display = "";
+     } else {
+      tr[i].style.display = "none";
+     }
+    }
+   }
+  }
+ </script>
+</body>
+</html>

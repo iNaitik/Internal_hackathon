@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmers' Q&A - Rural Development Hackathon</title>
+    <style>
+        :root {
+            --primary-color: rgb(26, 42, 56);
+            --secondary-color: rgb(52, 152, 219);
+            --light-color: rgb(236, 240, 241);
+            --accent-color: rgb(46, 204, 113);
+            --expert-color: rgb(155, 89, 182);
+            --warning-color: rgb(231, 76, 60);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .auth-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .auth-buttons button {
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        
+        .expert-badge {
+            background-color: var(--expert-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 5px;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .expert-badge::after {
+            content: "✓";
+            margin-left: 3px;
+        }
+        
+        .expert-level-1 {
+            background-color: #27ae60; /* Basic verified */
+        }
+        
+        .expert-level-2 {
+            background-color: #2980b9; /* Highly experienced */
+        }
+        
+        .expert-level-3 {
+            background-color: #8e44ad; /* Senior expert */
+            padding: 3px 10px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+        }
+        
+        .tagline {
+            font-style: italic;
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .ask-question {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .questions-list {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 16px;
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: rgb(41, 128, 185);
+        }
+        
+        .question-card {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        
+        .question-card:last-child {
+            border-bottom: none;
+        }
+        
+        .question-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .question-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .question-content {
+            margin-bottom: 10px;
+        }
+        
+        .answered {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+        
+        .unanswered {
+            color: var(--warning-color);
+            font-weight: 600;
+        }
+        
+        .answer {
+            margin-top: 15px;
+            padding: 10px;
+            background: #e8f4fc;
+            border-left: 3px solid var(--secondary-color);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .answer p {
+            margin: 5px 0 0 0;
+        }
+        
+        .answer-meta {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .answer-rating {
+            margin-left: 10px;
+            color: #f39c12;
+            font-weight: bold;
+        }
+        
+        .answer-btn {
+            background-color: var(--accent-color);
+            margin-top: 10px;
+            font-size: 14px;
+            padding: 5px 10px;
+        }
+        
+        .answer-btn:hover {
+            background-color: rgb(39, 174, 96);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .modal-actions button {
+            padding: 8px 15px;
+        }
+        
+        .modal-actions button.cancel {
+            background-color: #95a5a6;
+        }
+        
+        .modal-actions button.cancel:hover {
+            background-color: #7f8c8d;
+        }
+        
+        small {
+            font-size: 12px;
+            color: #666;
+            display: block;
+            margin-top: 3px;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .auth-buttons {
+                position: static;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            
+            .modal-content {
+                width: 90%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="auth-buttons" id="authButtons">
+                <button id="loginBtn">Expert Login</button>
+                <button id="registerBtn">Register as Expert</button>
+            </div>
+            <h1>Farmers' Question Portal</h1>
+            <p class="tagline">Ask farming questions and get verified expert advice for rural development</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="main-content">
+            <section class="ask-question">
+                <h2>Ask Your Farming Question</h2>
+                <form id="questionForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Village/District</label>
+                        <input type="text" id="location" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="crop">Crop Type (optional)</label>
+                        <select id="crop">
+                            <option value="">Select crop</option>
+                            <option value="rice">Rice</option>
+                            <option value="wheat">Wheat</option>
+                            <option value="maize">Maize</option>
+                            <option value="sugarcane">Sugarcane</option>
+                            <option value="cotton">Cotton</option>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="question">Your Question</label>
+                        <textarea id="question" required></textarea>
+                    </div>
+                    
+                    <button type="submit">Submit Question</button>
+                </form>
+            </section>
+            
+            <section class="questions-list">
+                <h2>Recent Questions</h2>
+                <div id="questionsContainer">
+                    <!-- Sample questions -->
+                    <div class="question-card">
+                        <div class="question-title">How to control stem borer in rice crops?</div>
+                        <div class="question-details">
+                            <span>Asked by: Rajesh from Maharashtra</span>
+                            <span class="answered">Answered</span>
+                        </div>
+                        <div class="question-content">
+                            I'm noticing yellowing leaves and dead hearts in my rice field. What organic methods can I use to control stem borer infestation?
+                        </div>
+                        <div class="answer">
+                            <strong>Expert Answer:</strong>
+                            <p>For organic control of stem borer in rice, you can use neem oil spray (5ml per liter of water) weekly for 3-4 weeks. Also consider releasing Trichogramma wasps (natural predators) at 50,000 per hectare. Remove and destroy infected plants to prevent spread.</p>
+                            <div class="answer-meta">
+                                Answered by: Dr. Ananya Patel 
+                                <span class="expert-badge expert-level-3">Senior Expert</span>
+                                <span class="answer-rating" title="This answer has been rated helpful by 42 farmers">
+                                    ★★★★☆ (42)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="question-card">
+                        <div class="question-title">Best irrigation practices for wheat in low rainfall areas</div>
+                        <div class="question-details">
+                            <span>Asked by: Priya from Rajasthan</span>
+                            <span class="answered">Answered</span>
+                        </div>
+                        <div class="question-content">
+                            With water scarcity in our region, what are the most efficient irrigation methods for wheat cultivation?
+                        </div>
+                        <div class="answer">
+                            <strong>Expert Answer:</strong>
+                            <p>In water-scarce regions, adopt drip irrigation or sprinkler systems which can save 30-50% water compared to flood irrigation. Schedule irrigation at critical growth stages (crown root initiation, tillering, flowering). Mulching with straw can reduce evaporation by 30%.</p>
+                            <div class="answer-meta">
+                                Answered by: Prof. Ramesh Kumar 
+                                <span class="expert-badge expert-level-2">Verified Expert</span>
+                                <span class="answer-rating" title="This answer has been rated helpful by 28 farmers">
+                                    ★★★★★ (28)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="question-card">
+                        <div class="question-title">Organic alternatives to chemical fertilizers for vegetable farming</div>
+                        <div class="question-details">
+                            <span>Asked by: Arun from Karnataka</span>
+                            <span class="unanswered">Not answered yet</span>
+                        </div>
+                        <div class="question-content">
+                            I want to shift to completely organic farming for my vegetable plot. What are the best alternatives to chemical fertilizers that I can make myself?
+                        </div>
+                        <button class="answer-btn">Answer This Question</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Answer Modal -->
+    <div id="answerModal" class="modal">
+        <div class="modal-content">
+            <h3>Answer This Question</h3>
+            <div id="modalQuestionContent" style="margin:10px 0; padding:10px; background:#f5f5f5;"></div>
+            <textarea id="answerText" style="width:100%; min-height:150px; margin:10px 0;" placeholder="Write your expert answer here..."></textarea>
+            <div class="modal-actions">
+                <button class="cancel" onclick="closeModal('answerModal')">Cancel</button>
+                <button onclick="submitAnswer()">Submit Answer</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h3>Expert Login</h3>
+            <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" required>
+            </div>
+            <div class="modal-actions">
+                <button class="cancel" onclick="closeModal('loginModal')">Cancel</button>
+                <button onclick="loginExpert()">Login</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <h3>Apply as Agricultural Expert</h3>
+            
+            <div class="form-group">
+                <label for="regName">Full Name</label>
+                <input type="text" id="regName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="regEmail">Professional Email</label>
+                <input type="email" id="regEmail" required>
+                <small>Must use your institutional/organization email</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="regPassword">Create Password</label>
+                <input type="password" id="regPassword" required minlength="8">
+            </div>
+            
+            <div class="form-group">
+                <label for="regQualification">Highest Agricultural Qualification</label>
+                <select id="regQualification" required>
+                    <option value="">Select qualification</option>
+                    <option value="phd">PhD in Agriculture/Related Field</option>
+                    <option value="masters">Master's Degree in Agriculture</option>
+                    <option value="bachelors">Bachelor's Degree in Agriculture</option>
+                    <option value="diploma">Diploma in Agriculture</option>
+                    <option value="certification">Government Certification</option>
+                    <option value="other">Other (Specify)</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="otherQualificationGroup" style="display:none;">
+                <label for="otherQualification">Please specify your qualification</label>
+                <input type="text" id="otherQualification">
+            </div>
+            
+            <div class="form-group">
+                <label for="regInstitution">Current Institution/Organization</label>
+                <input type="text" id="regInstitution" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="regExperience">Years of Professional Experience</label>
+                <input type="number" id="regExperience" required min="1">
+            </div>
+            
+            <div class="form-group">
+                <label for="regSpecialization">Area of Specialization</label>
+                <select id="regSpecialization" multiple size="3" required>
+                    <option value="crop_science">Crop Science</option>
+                    <option value="soil_science">Soil Science</option>
+                    <option value="horticulture">Horticulture</option>
+                    <option value="agronomy">Agronomy</option>
+                    <option value="plant_pathology">Plant Pathology</option>
+                    <option value="irrigation">Irrigation Management</option>
+                    <option value="organic_farming">Organic Farming</option>
+                    <option value="livestock">Livestock Management</option>
+                </select>
+                <small>Hold Ctrl/Cmd to select multiple</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="regLicense">Professional License/Certification Number (if applicable)</label>
+                <input type="text" id="regLicense">
+            </div>
+            
+            <div class="form-group">
+                <label for="regProof">Upload Proof of Qualification (PDF/Image)</label>
+                <input type="file" id="regProof" accept=".pdf,.jpg,.jpeg,.png" required>
+                <small>Degree certificate, professional license, or institutional ID</small>
+            </div>
+            
+            <div class="form-group">
+                <input type="checkbox" id="regAgree" required>
+                <label for="regAgree" style="display:inline;">I verify that all information provided is accurate and I agree to the <a href="#">Expert Code of Conduct</a></label>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="cancel" onclick="closeModal('registerModal')">Cancel</button>
+                <button onclick="submitExpertApplication()">Submit Application</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Approval Modal -->
+    <div id="approvalModal" class="modal">
+        <div class="modal-content">
+            <h3>Expert Application Received</h3>
+            <div style="padding: 15px; background: #e8f8f5; border-radius: 4px;">
+                <p>Thank you for your application to become a verified agricultural expert.</p>
+                <p>Your credentials are under review by our admin team. This process typically takes 2-3 business days.</p>
+                <p>You will receive an email notification once your application is approved.</p>
+            </div>
+            <div class="modal-actions">
+                <button onclick="closeModal('approvalModal')">Understood</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 Krishi-Mitra All right reserved | Farmers' Q&A Portal</p>
+        </div>
+    </footer>
+
+    <script>
+        // Current user state
+        let currentUser = null;
+        let currentQuestionCard = null;
+        
+        // DOM elements
+        const authButtons = document.getElementById('authButtons');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        
+        // Initialize event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in (from sessionStorage)
+            const savedUser = sessionStorage.getItem('expertUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateAuthUI();
+            }
+            
+            // Form submission for new questions
+            document.getElementById('questionForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const name = document.getElementById('name').value;
+                const location = document.getElementById('location').value;
+                const crop = document.getElementById('crop').value;
+                const questionText = document.getElementById('question').value;
+                
+                // Create new question element
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+                
+                questionDiv.innerHTML = `
+                    <div class="question-title">${crop ? crop.charAt(0).toUpperCase() + crop.slice(1) + ' cultivation: ' : ''}${questionText.substring(0, 50)}${questionText.length > 50 ? '...' : ''}</div>
+                    <div class="question-details">
+                        <span>Asked by: ${name} from ${location}</span>
+                        <span class="unanswered">Not answered yet</span>
+                    </div>
+                    <div class="question-content">
+                        ${questionText}
+                    </div>
+                    <button class="answer-btn">Answer This Question</button>
+                `;
+                
+                // Add to the top of questions list
+                document.getElementById('questionsContainer').prepend(questionDiv);
+                
+                // Add click event to the new answer button
+                questionDiv.querySelector('.answer-btn').addEventListener('click', function() {
+                    if (!currentUser) {
+                        alert('Please login as a verified expert to answer questions.');
+                        document.getElementById('loginModal').style.display = 'flex';
+                        return;
+                    }
+                    showAnswerModal(questionDiv);
+                });
+                
+                // Reset form
+                this.reset();
+                
+                // Show confirmation
+                alert('Your question has been submitted! Our agricultural experts will respond soon.');
+            });
+            
+            // Add click events to existing answer buttons
+            document.querySelectorAll('.answer-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (!currentUser) {
+                        alert('Please login as a verified expert to answer questions.');
+                        document.getElementById('loginModal').style.display = 'flex';
+                        return;
+                    }
+                    const questionCard = this.closest('.question-card');
+                    showAnswerModal(questionCard);
+                });
+            });
+            
+            // Auth button events
+            loginBtn.addEventListener('click', () => {
+                document.getElementById('loginModal').style.display = 'flex';
+            });
+            
+            registerBtn.addEventListener('click', () => {
+                document.getElementById('registerModal').style.display = 'flex';
+            });
+            
+            // Qualification dropdown change
+            document.getElementById('regQualification').addEventListener('change', function() {
+                document.getElementById('otherQualificationGroup').style.display = 
+                    this.value === 'other' ? 'block' : 'none';
+            });
+        });
+        
+        // Update UI based on auth state
+        function updateAuthUI() {
+            if (currentUser) {
+                authButtons.innerHTML = `
+                    <span style="color: white;">Logged in as ${currentUser.name} <span class="expert-badge expert-level-${currentUser.level || 1}">Verified Expert</span></span>
+                    <button id="logoutBtn">Logout</button>
+                `;
+                document.getElementById('logoutBtn').addEventListener('click', logout);
+            } else {
+                authButtons.innerHTML = `
+                    <button id="loginBtn">Expert Login</button>
+                    <button id="registerBtn">Register as Expert</button>
+                `;
+                document.getElementById('loginBtn').addEventListener('click', () => {
+                    document.getElementById('loginModal').style.display = 'flex';
+                });
+                document.getElementById('registerBtn').addEventListener('click', () => {
+                    document.getElementById('registerModal').style.display = 'flex';
+                });
+            }
+        }
+        
+        // Show answer modal
+        function showAnswerModal(questionCard) {
+            currentQuestionCard = questionCard;
+            const questionContent = questionCard.querySelector('.question-content').textContent;
+            document.getElementById('modalQuestionContent').textContent = questionContent;
+            
+            // If there's already an answer, pre-fill it for editing
+            const existingAnswer = questionCard.querySelector('.answer p');
+            document.getElementById('answerText').value = existingAnswer ? existingAnswer.textContent : '';
+            
+            document.getElementById('answerModal').style.display = 'flex';
+        }
+        
+        // Close modal
+        function closeModal(modalId = null) {
+            if (modalId) {
+                document.getElementById(modalId).style.display = 'none';
+            } else {
+                document.getElementById('answerModal').style.display = 'none';
+                document.getElementById('answerText').value = '';
+                currentQuestionCard = null;
+            }
+        }
+        
+        // Submit answer
+        function submitAnswer() {
+            const answerText = document.getElementById('answerText').value.trim();
+            
+            if (!answerText) {
+                alert('Please write an answer before submitting.');
+                return;
+            }
+            
+            // Check if answer already exists
+            let answerDiv = currentQuestionCard.querySelector('.answer');
+            
+            if (!answerDiv) {
+                // Create new answer div if it doesn't exist
+                answerDiv = document.createElement('div');
+                answerDiv.className = 'answer';
+                currentQuestionCard.appendChild(answerDiv);
+                
+                // Change status to answered
+                const statusSpan = currentQuestionCard.querySelector('.question-details span:last-child');
+                statusSpan.textContent = 'Answered';
+                statusSpan.className = 'answered';
+                
+                // Remove the answer button
+                const answerBtn = currentQuestionCard.querySelector('.answer-btn');
+                if (answerBtn) {
+                    answerBtn.remove();
+                }
+            }
+            
+            // Update answer content
+            answerDiv.innerHTML = `
+                <strong>Expert Answer:</strong>
+                <p>${answerText}</p>
+                <div class="answer-meta">
+                    Answered by: ${currentUser.name} 
+                    <span class="expert-badge expert-level-${currentUser.level || 1}">Verified Expert</span>
+                    <span class="answer-rating" title="This answer is awaiting farmer ratings">
+                        ★★★★★ (0)
+                    </span>
+                </div>
+            `;
+            
+            // Close modal
+            closeModal();
+            
+            // Show confirmation
+            alert('Your expert answer has been submitted successfully!');
+        }
+        
+        // Expert login
+        function loginExpert() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Mock expert data (in real app, this would be an API call)
+            const mockExperts = [
+                {
+                    email: 'expert@agri.edu',
+                    password: 'expert123',
+                    name: "Dr. Ananya Patel",
+                    qualification: "phd",
+                    institution: "State Agricultural University",
+                    experience: 12,
+                    level: 3,
+                    status: 'approved',
+                    specializations: ["crop_science", "plant_pathology"]
+                },
+                {
+                    email: 'agronomist@farm.org',
+                    password: 'agro123',
+                    name: "Prof. Ramesh Kumar",
+                    qualification: "masters",
+                    institution: "National Farming Institute",
+                    experience: 8,
+                    level: 2,
+                    status: 'approved',
+                    specializations: ["agronomy", "irrigation"]
+                },
+                {
+                    email: 'pending@test.com',
+                    password: 'pending123',
+                    name: "Test User",
+                    qualification: "bachelors",
+                    institution: "Test Org",
+                    experience: 3,
+                    status: 'pending',
+                    specializations: ["horticulture"]
+                }
+            ];
+            
+            const expert = mockExperts.find(ex => ex.email === email && ex.password === password);
+            
+            if (expert) {
+                if (expert.status !== 'approved') {
+                    alert('Your expert application is still under review. Please wait for approval.');
+                    return;
+                }
+                
+                currentUser = {
+                    name: expert.name,
+                    email: expert.email,
+                    qualification: expert.qualification,
+                    institution: expert.institution,
+                    experience: expert.experience,
+                    specializations: expert.specializations,
+                    level: expert.level,
+                    isVerified: true
+                };
+                
+                sessionStorage.setItem('expertUser', JSON.stringify(currentUser));
+                updateAuthUI();
+                closeModal('loginModal');
+                
+                // Clear fields
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+                
+                alert(`Welcome back, ${currentUser.name}!`);
+            } else {
+                alert('Invalid credentials or unapproved expert. Please try again.');
+            }
+        }
+        
+        // Submit expert application
+        function submitExpertApplication() {
+            // Validate all required fields
+            const requiredFields = [
+                'regName', 'regEmail', 'regPassword', 
+                'regQualification', 'regInstitution', 'regExperience',
+                'regSpecialization', 'regProof', 'regAgree'
+            ];
+            
+            for (const fieldId of requiredFields) {
+                const field = document.getElementById(fieldId);
+                if (!field.value || (field.type === 'checkbox' && !field.checked)) {
+                    alert(`Please complete all required fields, including ${field.labels[0].textContent}`);
+                    return;
+                }
+            }
+            
+            // Validate institutional email (basic check)
+            const email = document.getElementById('regEmail').value;
+            if (!email.includes('.edu') && !email.includes('.gov') && !email.includes('.org')) {
+                if (!confirm("We recommend using an institutional/organization email. Continue with this email?")) {
+                    return;
+                }
+            }
+            
+            // Validate experience
+            const experience = parseInt(document.getElementById('regExperience').value);
+            if (experience < 1) {
+                alert("Please enter valid years of experience");
+                return;
+            }
+            
+            // Prepare expert data
+            const expertData = {
+                name: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                qualification: document.getElementById('regQualification').value,
+                institution: document.getElementById('regInstitution').value,
+                experience: document.getElementById('regExperience').value,
+                specialization: Array.from(document.getElementById('regSpecialization').selectedOptions)
+                                 .map(option => option.value),
+                license: document.getElementById('regLicense').value,
+                status: 'pending',
+                applicationDate: new Date().toISOString()
+            };
+            
+            // Handle other qualification
+            if (expertData.qualification === 'other') {
+                expertData.qualification = document.getElementById('otherQualification').value;
+            }
+            
+            // Simulate file upload
+            const proofFile = document.getElementById('regProof').files[0];
+            if (proofFile) {
+                expertData.proofFile = {
+                    name: proofFile.name,
+                    size: proofFile.size,
+                    type: proofFile.type
+                };
+            }
+            
+            // In a real app: await fetch('/api/experts', { method: 'POST', body: JSON.stringify(expertData) })
+            
+            // In the submitExpertApplication() function, replace the approval message section with:
+            
+            // Show approval message and automatically login the mock expert
+            closeModal('registerModal');
+
+            // Auto-login the newly registered expert (for demo purposes)
+            currentUser = {
+                name: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                qualification: document.getElementById('regQualification').value,
+                institution: document.getElementById('regInstitution').value,
+                experience: parseInt(document.getElementById('regExperience').value),
+                level: 1, // Default level for new experts
+                isVerified: true
+            };
+
+            sessionStorage.setItem('expertUser', JSON.stringify(currentUser));
+            updateAuthUI();
+
+            alert('Thank you for registering! You are now logged in and can answer questions.');
+
+            // Clear form
+            document.getElementById('regName').value = '';
+            document.getElementById('regEmail').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('regInstitution').value = '';
+            document.getElementById('regExperience').value = '';
+            document.getElementById('regLicense').value = '';
+            document.getElementById('regProof').value = '';
+            document.getElementById('regAgree').checked = false;
+            document.getElementById('otherQualificationGroup').style.display = 'none';}
+        
+        // Logout
+        function logout() {
+            currentUser = null;
+            sessionStorage.removeItem('expertUser');
+            updateAuthUI();
+            alert('You have been logged out.');
+        }
+    </script>
+</body>
+</html>

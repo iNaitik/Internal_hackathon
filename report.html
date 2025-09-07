@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APMC Market Report</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f8fafc;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, rgb(26, 42, 56), rgb(38, 82, 112));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid rgb(26, 42, 56);
+            font-weight: 500;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background-color: rgb(26, 42, 56);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        th:hover {
+            background-color: rgb(38, 82, 112);
+        }
+        
+        th::after {
+            content: '↕';
+            position: absolute;
+            right: 10px;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+        
+        tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .sort-asc::after {
+            content: ' ↑';
+        }
+        
+        .sort-desc::after {
+            content: ' ↓';
+        }
+        
+        @media (max-width: 768px) {
+            th, td {
+                padding: 12px 8px;
+                font-size: 0.9rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>APMC Market Price and Arrival Report</h1>
+            <p class="subtitle">Real-time agricultural commodity prices and trends</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="stat-card">
+            Period: 1 March 2025 to 1 April 2025 | Total Arrival: <span id="total-arrival"></span> Tonnes
+        </div>
+
+        <!-- Table Section -->
+        <table>
+            <thead>
+                <tr>
+                    <th onclick="sortTable('date')">Date</th>
+                    <th onclick="sortTable('district')">District</th>
+                    <th onclick="sortTable('mandi')">Mandi</th>
+                    <th onclick="sortTable('variety')">Crop</th>
+                    <th onclick="sortTable('arrivals')">Arrivals (Tonnes)</th>
+                    <th onclick="sortTable('min')">Min Price (₹/Q)</th>
+                    <th onclick="sortTable('max')">Max Price (₹/Q)</th>
+                    <th onclick="sortTable('modal')">Modal Price (₹/Q)</th>
+                </tr>
+            </thead>
+            <tbody id="data-table"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // Sample data (removed previousModal property as it's no longer needed)
+        const data = [
+
+            // Jabalpur Paatan wheat
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 15.34, min: 2890, max: 2950, modal: 2950, date: "03/01/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 15.34, min: 2900, max: 3055, modal: 3055, date: "03/01/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 5.51, min: 2600, max: 2780, modal: 2755, date: "03/03/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 1.92, min: 2610, max: 2670, modal: 2670, date: "03/04/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 21.47, min: 2540, max: 2785, modal: 2655, date: "03/05/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 21.47, min: 2485, max: 2705, modal: 2640, date: "03/05/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 19.06, min: 2225, max: 2900, modal: 2735, date: "03/06/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 19.06, min: 2505, max: 2775, modal: 2595, date: "03/06/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 30.21, min: 2735, max: 2735, modal: 2735, date: "03/07/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 30.21, min: 2575, max: 2800, modal: 2720, date: "03/07/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 73.77, min: 2375, max: 2840, modal: 2630, date: "03/10/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 73.77, min: 2300, max: 2880, modal: 2770, date: "03/10/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 74.32, min: 2500, max: 2500, modal: 2500, date: "03/11/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 74.32, min: 2090, max: 2850, modal: 2605, date: "03/11/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 92.11, min: 2555, max: 2555, modal: 2555, date: "03/12/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 92.11, min: 1905, max: 2790, modal: 2605, date: "03/12/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 125.4, min: 2140, max: 2650, modal: 2645, date: "03/13/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 108.8, min: 1990, max: 2660, modal: 2555, date: "03/17/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 266.75, min: 2455, max: 2560, modal: 2560, date: "03/18/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 266.75, min: 2225, max: 2600, modal: 2475, date: "03/18/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 354.86, min: 2400, max: 2570, modal: 2530, date: "03/19/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Maize", arrivals: 354.86, min: 2430, max: 2430, modal: 2430, date: "03/19/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 354.86, min: 2235, max: 2585, modal: 2490, date: "03/19/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 482.04, min: 2230, max: 2600, modal: 2525, date: "03/20/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 482.04, min: 1855, max: 2535, modal: 2535, date: "03/20/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 413.7, min: 2195, max: 2620, modal: 2575, date: "03/21/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Maize", arrivals: 413.7, min: 2460, max: 2525, modal: 2525, date: "03/21/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 413.7, min: 2055, max: 2605, modal: 2495, date: "03/21/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 6.85, min: 2550, max: 2550, modal: 2550, date: "03/22/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 811.79, min: 2100, max: 2590, modal: 2485, date: "03/24/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 811.79, min: 2160, max: 2540, modal: 2505, date: "03/24/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 659.42, min: 2155, max: 2590, modal: 2470, date: "03/25/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Maize", arrivals: 659.42, min: 2480, max: 2500, modal: 2500, date: "03/25/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 659.42, min: 2395, max: 2540, modal: 2455, date: "03/25/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 888.64, min: 2200, max: 2555, modal: 2470, date: "03/26/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Maize", arrivals: 888.64, min: 2420, max: 2475, modal: 2450, date: "03/26/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mohan Mondal", arrivals: 888.64, min: 2530, max: 2530, modal: 2530, date: "03/26/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 888.64, min: 2365, max: 2560, modal: 2515, date: "03/26/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 680.7, min: 2205, max: 2570, modal: 2470, date: "03/27/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Maize", arrivals: 680.7, min: 2411, max: 2500, modal: 2500, date: "03/27/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 680.7, min: 2465, max: 2515, modal: 2470, date: "03/27/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 614.18, min: 2235, max: 2530, modal: 2450, date: "03/28/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "PISSI", arrivals: 614.18, min: 2455, max: 2455, modal: 2455, date: "03/28/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 614.18, min: 2420, max: 2525, modal: 2465, date: "03/28/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 640.68, min: 2300, max: 2530, modal: 2400, date: "03/29/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 640.68, min: 2425, max: 2505, modal: 2455, date: "03/29/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Maize", arrivals: 11.82, min: 2430, max: 2430, modal: 2430, date: "04/01/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 899.34, min: 2200, max: 2535, modal: 2450, date: "04/02/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Maize", arrivals: 899.34, min: 2430, max: 2500, modal: 2500, date: "04/02/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 899.34, min: 2200, max: 2515, modal: 2440, date: "04/02/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Maize", arrivals: 77.13, min: 2460, max: 2460, modal: 2460, date: "04/03/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Mill Quality", arrivals: 77.13, min: 2400, max: 2505, modal: 2500, date: "04/03/2025" },
+            { district: "Jabalpur", mandi: "Paatan", variety: "Wheat", arrivals: 77.13, min: 2435, max: 2505, modal: 2495, date: "04/03/2025" },
+
+            // Jabalpur Jabalpur Wheat
+
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 379.48, min: 2600, max: 3026, modal: 2800, date: "03/01/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 149.51, min: 2000, max: 2965, modal: 2700, date: "03/03/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 149.51, min: 2000, max: 3081, modal: 2700, date: "03/03/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 135.91, min: 2064, max: 3072, modal: 2751, date: "03/04/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 121.03, min: 1600, max: 3095, modal: 2630, date: "03/05/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 97.96, min: 1600, max: 2971, modal: 2901, date: "03/06/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 97.96, min: 2400, max: 2825, modal: 2825, date: "03/06/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 104.26, min: 2528, max: 2941, modal: 2651, date: "03/07/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 236.6, min: 2250, max: 3058, modal: 2651, date: "03/10/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 233.84, min: 1800, max: 3200, modal: 2641, date: "03/11/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 175.68, min: 1806, max: 2899, modal: 2630, date: "03/12/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 66.01, min: 2320, max: 2775, modal: 2630, date: "03/13/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 490.05, min: 2006, max: 2655, modal: 2531, date: "03/17/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 490.05, min: 2150, max: 2200, modal: 2200, date: "03/17/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 638.77, min: 1625, max: 2585, modal: 2500, date: "03/18/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 638.77, min: 2472, max: 2472, modal: 2472, date: "03/18/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 683.43, min: 2240, max: 2625, modal: 2501, date: "03/19/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 833.92, min: 2025, max: 2652, modal: 2500, date: "03/20/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 833.92, min: 2481, max: 2481, modal: 2481, date: "03/20/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1155.8, min: 2152, max: 2653, modal: 2525, date: "03/21/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1155.8, min: 2360, max: 2500, modal: 2480, date: "03/21/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 1155.8, min: 2300, max: 2350, modal: 2350, date: "03/21/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 31.3, min: 2400, max: 2470, modal: 2470, date: "03/22/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 47.07, min: 2410, max: 2540, modal: 2450, date: "03/23/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1612.81, min: 2300, max: 2450, modal: 2400, date: "03/24/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1612.81, min: 2100, max: 2581, modal: 2400, date: "03/24/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 1612.81, min: 2250, max: 2494, modal: 2300, date: "03/24/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1082.38, min: 2400, max: 2465, modal: 2430, date: "03/25/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1082.38, min: 2200, max: 2592, modal: 2430, date: "03/25/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 1082.38, min: 2280, max: 2449, modal: 2449, date: "03/25/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1376.55, min: 2300, max: 2465, modal: 2400, date: "03/26/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1376.55, min: 2005, max: 2619, modal: 2480, date: "03/26/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 1376.55, min: 2400, max: 2400, modal: 2400, date: "03/26/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1614.84, min: 1925, max: 2653, modal: 2471, date: "03/27/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1614.84, min: 2300, max: 2600, modal: 2471, date: "03/27/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat Mix", arrivals: 1614.84, min: 2300, max: 2400, modal: 2400, date: "03/27/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 1614.84, min: 2300, max: 2400, modal: 2350, date: "03/27/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 1614.84, min: 2455, max: 2455, modal: 2455, date: "03/27/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1812.35, min: 1900, max: 2700, modal: 2400, date: "03/28/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1812.35, min: 2300, max: 2455, modal: 2400, date: "03/28/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat-Organic", arrivals: 1812.35, min: 2300, max: 2400, modal: 2400, date: "03/28/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 1812.35, min: 2300, max: 2350, modal: 2350, date: "03/28/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Other", arrivals: 1812.35, min: 2355, max: 2355, modal: 2355, date: "03/28/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1187.29, min: 2110, max: 2612, modal: 2425, date: "03/29/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1187.29, min: 2200, max: 2600, modal: 2425, date: "03/29/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat Mix", arrivals: 1187.29, min: 2300, max: 2400, modal: 2400, date: "03/29/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 1187.29, min: 2350, max: 2400, modal: 2400, date: "03/29/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 40.7, min: 2350, max: 2400, modal: 2400, date: "03/30/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 68.2, min: 2390, max: 2500, modal: 2425, date: "03/31/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 68.2, min: 2350, max: 2425, modal: 2425, date: "03/31/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 428.18, min: 2300, max: 2610, modal: 2400, date: "04/01/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 428.18, min: 2300, max: 2425, modal: 2400, date: "04/01/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat Mix", arrivals: 428.18, min: 2350, max: 2354, modal: 2354, date: "04/01/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 428.18, min: 2300, max: 2400, modal: 2300, date: "04/01/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Mill Quality", arrivals: 428.18, min: 2350, max: 2351, modal: 2351, date: "04/01/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1468.51, min: 2200, max: 2642, modal: 2400, date: "04/02/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 1468.51, min: 2260, max: 2490, modal: 2400, date: "04/02/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "(Mill Quality)", arrivals: 1468.51, min: 2275, max: 2275, modal: 2275, date: "04/02/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 84.87, min: 2405, max: 2405, modal: 2405, date: "04/03/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Wheat", arrivals: 84.87, min: 2300, max: 2610, modal: 2600, date: "04/03/2025" },
+
+            //Jabalpur Shahpura Maize
+
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Maize", arrivals: 29.2,min: 1950, max: 2000, modal: 2000, date: "03/06/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Maize", arrivals: 1.2,  min: 2000, max: 2000, modal: 2000, date: "03/20/2025" },
+
+            // Soyabeen-jabalpur-jabalpur
+
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 20.1, min: 3000, max: 3000, modal: 3000, date: "03/02/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 4.31, min: 3480, max: 3625, modal: 3625, date: "03/03/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 0.09, min: 2805, max: 2805, modal: 2805, date: "03/04/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 3.68, min: 3500, max: 3825, modal: 3825, date: "03/05/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 1.43, min: 3590, max: 3650, modal: 3650, date: "03/06/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 2.69, min: 2975, max: 3760, modal: 3760, date: "03/07/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 1.2, min: 3600, max: 3600, modal: 3600, date: "03/08/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 0.27, min: 3700, max: 3700, modal: 3700, date: "03/10/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 0.38, min: 3900, max: 3900, modal: 3900, date: "03/11/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 0.28, min: 2965, max: 2965, modal: 2965, date: "03/17/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 0.59, min: 3650, max: 3650, modal: 3650, date: "03/20/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 2.31, min: 3825, max: 3865, modal: 3865, date: "03/24/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 0.75, min: 3950, max: 3950, modal: 3950, date: "03/26/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 1.67, min: 3045, max: 3905, modal: 3905, date: "03/27/2025" },
+            { district: "Jabalpur", mandi: "Jabalpur", variety: "Soyabeen", arrivals: 2.33, min: 3755, max: 4105, modal: 4105, date: "04/02/2025" },
+
+            // wheat-sehora-jabalpur
+
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 6.9, min: 2725, max: 2894, modal: 2800, date: "03/01/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 39.11, min: 1800, max: 2821, modal: 2821, date: "03/03/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Wheat", arrivals: 39.11, min: 2400, max: 2870, modal: 2870, date: "03/03/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 36.53, min: 2600, max: 2841, modal: 2820, date: "03/04/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 17.23, min: 2650, max: 2810, modal: 2744, date: "03/05/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 21.07, min: 1800, max: 2745, modal: 2745, date: "03/06/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Wheat", arrivals: 21.07, min: 2650, max: 2650, modal: 2650, date: "03/06/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 64.58, min: 2600, max: 2744, modal: 2650, date: "03/07/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 53.76, min: 2425, max: 2725, modal: 2600, date: "03/10/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 27.29, min: 2500, max: 2708, modal: 2703, date: "03/11/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 54.33, min: 2117, max: 2681, modal: 2640, date: "03/12/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 10.98, min: 2550, max: 2676, modal: 2550, date: "03/13/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 74.18, min: 2361, max: 2576, modal: 2500, date: "03/17/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 247.97, min: 2000, max: 2579, modal: 2450, date: "03/18/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 297.13, min: 2300, max: 2561, modal: 2504, date: "03/19/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 473.4, min: 2250, max: 2617, modal: 2526, date: "03/20/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Wheat", arrivals: 473.4, min: 2300, max: 2350, modal: 2300, date: "03/20/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 481.05, min: 2108, max: 2574, modal: 2537, date: "03/21/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 93.41, min: 2450, max: 2500, modal: 2450, date: "03/22/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 110.12, min: 2470, max: 2595, modal: 2501, date: "03/23/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Wheat", arrivals: 110.12, min: 2400, max: 2450, modal: 2450, date: "03/23/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 1198.59, min: 1800, max: 2577, modal: 2476, date: "03/24/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 977.03, min: 2000, max: 2641, modal: 2400, date: "03/25/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 1075.86, min: 1950, max: 2595, modal: 2400, date: "03/26/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 1110.93, min: 1891, max: 2525, modal: 2350, date: "03/27/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 331.14, min: 2325, max: 2449, modal: 2400, date: "03/28/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: null, min: 2345, max: 2598, modal: 2400, date: "03/28/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 152.51, min: 2350, max: 2435, modal: 2410, date: "03/29/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Wheat", arrivals: 152.51, min: 2400, max: 2400, modal: 2400, date: "03/29/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: null, min: 2360, max: 2598, modal: 2410, date: "03/29/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 7.63, min: 2598, max: 2598, modal: 2598, date: "03/30/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 238.05, min: 2350, max: 2400, modal: 2400, date: "03/31/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: null, min: 2580, max: 2592, modal: 2592, date: "03/31/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 114.89, min: 2350, max: 2400, modal: 2400, date: "04/01/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: null, min: 2350, max: 2410, modal: 2400, date: "04/01/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 1065.34, min: 2272, max: 2511, modal: 2427, date: "04/02/2025" },
+            { district: "Jabalpur", mandi: "Sehora", variety: "Mill Quality", arrivals: 5, min: 2300, max: 2300, modal: 2300, date: "04/03/2025" },
+
+            // wheat shahpura jabalpur
+
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Mill Quality", arrivals: 35.7, min: 2650, max: 2700, modal: 2650, date: "03/01/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Mill Quality", arrivals: 7.14, min: 2625, max: 2625, modal: 2625, date: "03/03/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Mill Quality", arrivals: 4.85, min: 2400, max: 2400, modal: 2400, date: "03/04/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Mill Quality", arrivals: 7.16, min: 2000, max: 2060, modal: 2060, date: "03/05/2025" },
+            { district: "Jabalpur", mandi: "Shahpura(Jabalpur)", variety: "Mill Quality", arrivals: 10.9, min: 2500, max: 2500, modal: 2500, date: "03/08/2025" },
+            { district: "Jabalpur", mandi: "Shahpura(Jabalpur)", variety: "Mill Quality", arrivals: 23.4, min: 2435, max: 2500, modal: 2500, date: "03/10/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Wheat", arrivals: 4.78, min: 2300, max: 2300, modal: 2300, date: "03/12/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Mill Quality", arrivals: 24.6, min: 2211, max: 2221, modal: 2221, date: "03/16/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Mill Quality", arrivals: 4.4, min: 1700, max: 1700, modal: 1700, date: "03/17/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Wheat", arrivals: 3.61, min: 2310, max: 2310, modal: 2310, date: "03/18/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Mill Quality", arrivals: 54, min: 2200, max: 2400, modal: 2221, date: "03/20/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Mill Quality", arrivals: 4.88, min: 1650, max: 1650, modal: 1650, date: "03/24/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Mill Quality", arrivals: 15, min: 2200, max: 2300, modal: 2300, date: "03/25/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Mill Quality", arrivals: 6.95, min: 1600, max: 1600, modal: 1600, date: "03/28/2025" },
+            { district: "Jabalpur", mandi: "Shahpura", variety: "Mill Quality", arrivals: 46.6, min: 2100, max: 2154, modal: 2100, date: "03/29/2025" },
+
+            // Indore Indore Jowar
+
+            { district: "Indore", mandi: "Indore", variety: "Jowar", category: "Cereals",arrivals: 1.39, min: 2426, max: 2426, modal: 2426, date: "03/21/2025" },
+
+            // Indore Mhow Maize
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:0.21,min:2300,max:2300,modal:2300,date:"03/01/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:1.94,min:2260,max:2260,modal:2260,date:"03/06/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:4.46,min:1851,max:2180,modal:2180,date:"03/07/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:6.86,min:1501,max:2101,modal:2101,date:"03/10/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:0.27,min:2071,max:2551,modal:2551,date:"03/11/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:0.08,min:1901,max:1901,modal:1901,date:"03/18/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:0.15,min:1766,max:2480,modal:2480,date:"03/21/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:1.6,min:2500,max:2500,modal:2500,date:"03/24/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:0.44,min:2011,max:2011,modal:2011,date:"03/25/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:2.45,min:1951,max:2200,modal:2200,date:"03/26/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:1.72,min:2020,max:2020,modal:2020,date:"03/27/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Maize",arrivals:0.38,min:1851,max:2120,modal:2120,date:"04/02/2025"},
+
+            // onion-gautampura-indore
+            
+            {district:"Indore",mandi:"Gautampura",variety:"Onion",arrivals:26,min:200,max:600,modal:600,date:"03/08/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Onion",arrivals:8.57,min:300,max:300,modal:300,date:"03/22/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Onion",arrivals:32.32,min:300,max:700,modal:700,date:"03/26/2025"},
+
+            // onion-indore-indore 
+
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:991.35,min:484,max:2532,modal:2532,date:"03/01/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:960.24,min:496,max:2210,modal:2210,date:"03/03/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:1149.45,min:506,max:2489,modal:2000,date:"03/04/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:978.89,min:544,max:2405,modal:1700,date:"03/05/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:1177.55,min:575,max:2550,modal:2550,date:"03/06/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:1273.11,min:1274,max:2400,modal:2400,date:"03/07/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:1468.73,min:1256,max:2302,modal:2302,date:"03/08/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:26,min:200,max:600,modal:600,date:"03/08/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:1672.48,min:487,max:1881,modal:1400,date:"03/10/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:1577.1,min:469,max:1621,modal:1399,date:"03/11/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:1397.07,min:262,max:2090,modal:2090,date:"03/12/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:963.63,min:431,max:1576,modal:1576,date:"03/13/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:522.09,min:454,max:1563,modal:1563,date:"03/15/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:1195.43,min:425,max:1690,modal:1364,date:"03/17/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:1485.29,min:511,max:1602,modal:1602,date:"03/18/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:1756.87,min:519,max:1525,modal:1471,date:"03/20/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:2077.18,min:466,max:1760,modal:1468,date:"03/21/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:8.57,min:300,max:300,modal:300,date:"03/22/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:2114.18,min:477,max:1603,modal:1359,date:"03/22/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:2542.48,min:488,max:1569,modal:1379,date:"03/24/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:2061.15,min:499,max:1683,modal:1391,date:"03/25/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:32.32,min:300,max:700,modal:700,date:"03/26/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:2046.13,min:378,max:1450,modal:1336,date:"03/26/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:1952.75,min:388,max:1451,modal:1300,date:"03/27/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:2216,min:393,max:1540,modal:1540,date:"03/28/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:2724.93,min:353,max:1356,modal:1198,date:"03/29/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:3002.93,min:467,max:1290,modal:1114,date:"04/01/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Onion",arrivals:2588.28,min:431,max:1350,modal:1190,date:"04/02/2025"},
+
+
+            // Soyabeen-mhow-indore
+
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:234.75,min:1780,max:4244,modal:3931,date:"03/01/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:317.97,min:1000,max:4089,modal:3800,date:"03/03/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:232.56,min:1200,max:3966,modal:3921,date:"03/04/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:273.38,min:1600,max:3996,modal:3951,date:"03/05/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:252.38,min:1451,max:4121,modal:4061,date:"03/06/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:193.37,min:1741,max:4158,modal:4031,date:"03/07/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:8.3,min:3911,max:3911,modal:3911,date:"03/09/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:356.95,min:1251,max:3860,modal:3831,date:"03/10/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:245.61,min:1001,max:4171,modal:4100,date:"03/11/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:154.35,min:1200,max:4165,modal:4100,date:"03/12/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:47.66,min:3570,max:4221,modal:4221,date:"03/15/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:188.37,min:1000,max:4170,modal:4050,date:"03/17/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:129.17,min:3031,max:4215,modal:4181,date:"03/18/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:163.75,min:2700,max:4221,modal:4171,date:"03/20/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:218.5,min:1391,max:4136,modal:3800,date:"03/21/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:324.45,min:1000,max:4075,modal:3801,date:"03/24/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:265.87,min:1191,max:4195,modal:4000,date:"03/25/2025"},      
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:189.09,min:1981,max:4150,modal:4081,date:"03/26/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:206.65,min:1000,max:4160,modal:4000,date:"03/27/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:201.51,min:1000,max:3991,modal:3000,date:"03/28/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:92.76,min:3955,max:3970,modal:3970,date:"03/31/2025"},
+            {district:"Indore",mandi:"Mhow",variety:"Soyabeen",arrivals:187.69,min:1451,max:4531,modal:4400,date:"04/02/2025"},
+
+
+            // Soyabeen-indore-gautampura
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:94.02,min:3885,max:4130,modal:4130,date:"03/01/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:3.67,min:3983,max:3983,modal:3983,date:"03/02/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:67.28,min:2929,max:4022,modal:3511,date:"03/03/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:41.52,min:3966,max:3966,modal:3966,date:"03/04/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:78.43,min:3850,max:3975,modal:3975,date:"03/05/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:99.57,min:3726,max:4100,modal:4100,date:"03/06/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:56.96,min:3750,max:4026,modal:4026,date:"03/07/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:68.91,min:3781,max:3925,modal:3925,date:"03/12/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:45.69,min:3910,max:4025,modal:4025,date:"03/10/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:43.56,min:3650,max:3970,modal:3970,date:"03/11/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:114.56,min:3910,max:4025,modal:4005,date:"03/13/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:18.53,min:4001,max:4010,modal:4010,date:"03/14/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:19.1,min:4000,max:4011,modal:4011,date:"03/15/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:23.73,min:3975,max:4015,modal:4005,date:"03/16/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:115.18,min:3850,max:4021,modal:4001,date:"03/17/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:13.79,min:2251,max:3975,modal:3800,date:"03/18/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:null,min:3800,max:3800,modal:3800,date:"03/18/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:3.33,min:3893,max:3893,modal:3893,date:"03/21/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:1.96,min:4000,max:4000,modal:4000,date:"03/22/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:6.96,min:3800,max:4000,modal:4000,date:"03/24/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:46.12,min:3700,max:4000,modal:3700,date:"03/25/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:0.54,min:4000,max:4000,modal:4000,date:"03/26/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:1.97,min:3966,max:3966,modal:3966,date:"03/27/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:8,min:4000,max:4000,modal:4000,date:"03/28/2025"},
+            {district:"Indore",mandi:"Gautampura",variety:"Soyabeen",arrivals:18.62,min:3940,max:4100,modal:4100,date:"03/29/2025"},
+
+            // Indore Indore Soyabeen
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:436.28,min:1410,max:4265,modal:3965,date:"03/01/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:29.46,min:4137,max:4137,modal:4137,date:"03/02/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:613.68,min:820,max:4085,modal:3945,date:"03/03/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:337.83,min:550,max:4055,modal:3965,date:"03/04/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:450.39,min:765,max:4275,modal:3950,date:"03/05/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:450.31,min:600,max:4120,modal:4015,date:"03/06/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:535.25,min:1000,max:4140,modal:3900,date:"03/07/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:314.34,min:500,max:4135,modal:4040,date:"03/08/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:30.19,min:4080,max:4080,modal:4080,date:"03/09/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:605.62,min:500,max:4135,modal:4000,date:"03/10/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:551.59,min:500,max:4105,modal:3990,date:"03/11/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:337.04,min:2415,max:4000,modal:3880,date:"03/12/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:182.68,min:2930,max:4075,modal:3975,date:"03/13/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:518.66,min:600,max:4100,modal:3900,date:"03/17/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:377.61,min:955,max:4100,modal:3950,date:"03/18/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:4,min:3900,max:3900,modal:3900,date:"03/19/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:350.57,min:1500,max:4290,modal:3900,date:"03/20/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:311.35,min:805,max:4180,modal:4025,date:"03/21/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:459.14,min:2920,max:4115,modal:3975,date:"03/22/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:35.18,min:3890,max:3890,modal:3890,date:"03/23/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:347.44,min:1235,max:4130,modal:4085,date:"03/24/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:352.9,min:630,max:4190,modal:4030,date:"03/25/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:404.77,min:1500,max:6000,modal:4080,date:"03/26/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:264.81,min:770,max:4200,modal:4140,date:"03/27/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:199.78,min:555,max:6000,modal:6000,date:"03/28/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:60.58,min:2720,max:6000,modal:6000,date:"03/29/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:44.35,min:2720,max:4130,modal:4130,date:"03/30/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:196.99,min:2300,max:6000,modal:6000,date:"04/01/2025"},
+            {district:"Indore",mandi:"Indore",variety:"Soyabeen",arrivals:197.62,min:500,max:4465,modal:4375,date:"04/02/2025"},
+
+            // Soyabeen-sanwer-indore
+
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 345.35, min: 2550, max: 4141, modal: 3805, date: "03/01/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 2801, max: 4050, modal: 3805, date: "03/01/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 253.71, min: 2000, max: 4140, modal: 4000, date: "03/03/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 3450, max: 4161, modal: 4000, date: "03/03/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 327.39, min: 2000, max: 4041, modal: 3900, date: "03/04/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 2901, max: 4076, modal: 3900, date: "03/04/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 202.72, min: 1700, max: 3985, modal: 3900, date: "03/05/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 2000, max: 4022, modal: 3900, date: "03/05/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 122.25, min: 2551, max: 4141, modal: 3600, date: "03/06/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 2701, max: 4052, modal: 3600, date: "03/06/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Other", arrivals: 218.8, min: 4080, max: 4080, modal: 4080, date: "03/07/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 218.8, min: 2200, max: 4150, modal: 4065, date: "03/07/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 75.99, min: 3751, max: 4125, modal: 3821, date: "03/08/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 65.73, min: 3720, max: 4000, modal: 3850, date: "03/09/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Other", arrivals: 316.84, min: 3875, max: 3875, modal: 3875, date: "03/10/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 316.84, min: 2200, max: 4066, modal: 3800, date: "03/10/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 3000, max: 4151, modal: 3800, date: "03/10/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 256.21, min: 3000, max: 4000, modal: 4000, date: "03/11/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 3611, max: 3960, modal: 3800, date: "03/11/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 451.74, min: 2600, max: 3900, modal: 3695, date: "03/12/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 3000, max: 4051, modal: 3695, date: "03/12/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 116.8, min: 3110, max: 4053, modal: 3700, date: "03/13/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 90.99, min: 3500, max: 4050, modal: 3700, date: "03/15/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 11, min: 4000, max: 4000, modal: 4000, date: "03/16/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 282.81, min: 2700, max: 4111, modal: 3770, date: "03/17/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 3300, max: 4022, modal: 3770, date: "03/17/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 199.17, min: 2700, max: 3950, modal: 3950, date: "03/18/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 2700, max: 4076, modal: 3950, date: "03/18/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 128.32, min: 2800, max: 4205, modal: 4061, date: "03/20/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 230.57, min: 2580, max: 4150, modal: 4085, date: "03/21/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 136.81, min: 3300, max: 4200, modal: 4200, date: "03/22/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 134.66, min: 3000, max: 4075, modal: 3800, date: "03/24/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 3200, max: 3939, modal: 3800, date: "03/24/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 81.75, min: 1900, max: 4071, modal: 3900, date: "03/25/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 98.84, min: 3665, max: 4161, modal: 4161, date: "03/26/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 43.19, min: 3620, max: 4185, modal: 4185, date: "03/27/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 122.54, min: 3313, max: 4150, modal: 4000, date: "03/28/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 115.5, min: 4000, max: 4400, modal: 4380, date: "03/29/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 93.74, min: 3990, max: 4090, modal: 4000, date: "03/30/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 61.57, min: 3700, max: 3700, modal: 3700, date: "03/31/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 33.78, min: 3790, max: 4200, modal: 4000, date: "04/01/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: 90.07, min: 3355, max: 4452, modal: 4400, date: "04/02/2025" },
+            { district: "Indore", mandi: "Sanwer", variety: "Soyabeen", arrivals: null, min: 3790, max: 4453, modal: 4400, date: "04/02/2025" },
+
+            // onion-badnagar-ujjain
+            
+            { district: "Ujjain", mandi: "Badnagar", variety: "Onion", arrivals: 6, min: 800, max: 800, modal: 800, date: "03/28/2025" },
+    
+            // onion lashkar gwalior
+            { district: "Gwalior", mandi: "Lashkar", variety: "Onion", arrivals: 7.5, min: 1200, max: 1200, modal: 1200, date: "03/03/2025" },
+
+            // <!-- indore-indore-maize -->
+
+            { district: "Indore", mandi: "Indore", variety: "Maize", arrival: 0.03, min: 2000, max: 2000, modal: 2000, date: "2024-02-21" },
+            { district: "Indore", mandi: "Indore", variety: "Maize", arrival: 0.07, min: 1790, max: 1790, modal: 1790, date: "2025-03-06" },
+            { district: "Indore", mandi: "Indore", variety: "Maize", arrival: 0.2, min: 2275, max: 2275, modal: 2275, date: "2025-01-15" },
+            { district: "Indore", mandi: "Indore", variety: "Maize", arrival: 0.27, min: 2122, max: 2122, modal: 2122, date: "2024-01-04" },
+            { district: "Indore", mandi: "Indore", variety: "Maize", arrival: 0.28, min: 2562, max: 2562, modal: 2562, date: "2025-02-25" },
+            { district: "Indore", mandi: "Indore", variety: "Maize", arrival: 0.32, min: 1812, max: 2020, modal: 2020, date: "2025-02-28" },
+            { district: "Indore", mandi: "Indore", variety: "Maize", arrival: 0.42, min: 2056, max: 2056, modal: 2056, date: "2024-02-05" },
+            { district: "Indore", mandi: "Indore", variety: "Maize", arrival: 0.48, min: 2246, max: 2246, modal: 2246, date: "2025-01-06" },
+            { district: "Indore", mandi: "Indore", variety: "Maize", arrival: 0.53, min: 1940, max: 1940, modal: 1940, date: "2025-02-22" },
+            { district: "Indore", mandi: "Indore", variety: "Maize", arrival: 0.64, min: 1902, max: 2090, modal: 2090, date: "2025-01-22" },
+
+            // <!-- indore-mhow-maize -->
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 0.21, min: 2300, max: 2300, modal: 2300, date: "2025-03-01" },
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 1.94, min: 2260, max: 2260, modal: 2260, date: "2025-03-06" },
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 4.46, min: 1851, max: 2180, modal: 2180, date: "2025-03-07" },
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 6.86, min: 1501, max: 2101, modal: 2101, date: "2025-03-10" },
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 0.27, min: 2071, max: 2551, modal: 2551, date: "2025-03-11" },
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 0.08, min: 1901, max: 1901, modal: 1901, date: "2025-03-18" },
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 0.15, min: 1766, max: 2480, modal: 2480, date: "2025-03-21" },
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 1.6, min: 2500, max: 2500, modal: 2500, date: "2025-03-24" },
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 0.44, min: 2011, max: 2011, modal: 2011, date: "2025-03-25" },
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 2.45, min: 1951, max: 2200, modal: 2200, date: "2025-03-26" },
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 1.72, min: 2020, max: 2020, modal: 2020, date: "2025-03-27" },
+            { district: "Indore", mandi: "Mhow", variety: "Maize", arrival: 0.38, min: 1851, max: 2120, modal: 2120, date: "2025-04-02" },
+
+            //  <!-- indore indore groundnut -->
+
+            { district: "Indore", variety: "Groundnut seed", arrival: 25, min: 7000, max: 7000, model: 7000, date: "2025-03-03" },
+            { district: "Indore", variety: "Groundnut seed", arrival: 4, min: 4000, max: 4000, model: 4000, date: "2025-03-13" },
+            { district: "Indore", variety: "Groundnut seed", arrival: 10.35, min: 7250, max: 10381, model: 10381, date: "2025-03-17" },
+            { district: "Indore", variety: "Groundnut seed", arrival: 10, min: 10500, max: 10500, model: 10500, date: "2025-03-18" },
+            { district: "Indore", variety: "Groundnut seed", arrival: 14, min: 7996, max: 7996, model: 7996, date: "2025-03-20" },
+            { district: "Indore", variety: "Groundnut seed", arrival: 37.96, min: 6000, max: 6075, model: 6075, date: "2025-03-21" },
+            { district: "Indore", variety: "Groundnut seed", arrival: 12.65, min: 7600, max: 7600, model: 7600, date: "2025-03-27" },
+            { district: "Indore", variety: "Groundnut seed", arrival: 5, min: 10000, max: 10000, model: 10000, date: "2025-03-28" },
+            { district: "Indore", variety: "Groundnut seed", arrival: 10.7, min: 7650, max: 7650, model: 7650, date: "2025-03-29" },
+            { district: "Indore", variety: "Groundnut seed", arrival: 20.45, min: 8000, max: 8000, model: 8000, date: "2025-03-30" },
+            { district: "Indore", variety: "Groundnut seed", arrival: 10, min: 10667, max: 10667, model: 10667, date: "2025-03-31" },
+
+            // <!-- ujjain tarana soyabeen -->
+
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 81.48, min: 1701, max: 4130, model: 4000, date: "2025-03-01" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 160.88, min: 2000, max: 4200, model: 3900, date: "2025-03-03" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 94.47, min: 1600, max: 4100, model: 3700, date: "2025-03-04" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soybean-Organic", arrival: 94.47, min: 3650, max: 3650, model: 3650, date: "2025-03-04" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 88.01, min: 1200, max: 4125, model: 3900, date: "2025-03-05" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 145.22, min: 2157, max: 4093, model: 3900, date: "2025-03-06" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 145.8, min: 1301, max: 4200, model: 4050, date: "2025-03-07" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 108.14, min: 3001, max: 4125, model: 3600, date: "2025-03-10" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soybean-Organic", arrival: 108.14, min: 3790, max: 3790, model: 3790, date: "2025-03-10" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 72.79, min: 2900, max: 4035, model: 3900, date: "2025-03-11" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 46.28, min: 2570, max: 4043, model: 4000, date: "2025-03-12" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 20.13, min: 3751, max: 4100, model: 4100, date: "2025-03-13" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 89.17, min: 1800, max: 4061, model: 3900, date: "2025-03-17" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 55.74, min: 3175, max: 4100, model: 3400, date: "2025-03-18" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 2.79, min: 3800, max: 3985, model: 3985, date: "2025-03-20" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 111.98, min: 2000, max: 4133, model: 3800, date: "2025-03-21" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 1.43, min: 3756, max: 3801, model: 3801, date: "2025-03-22" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 16.39, min: 3500, max: 3650, model: 3650, date: "2025-03-23" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 221.31, min: 1325, max: 4300, model: 3900, date: "2025-03-24" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 61.69, min: 600, max: 4201, model: 4000, date: "2025-03-25" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 46.58, min: 2147, max: 4100, model: 4100, date: "2025-03-26" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 118.6, min: 1213, max: 4100, model: 4100, date: "2025-03-27" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 29.53, min: 3610, max: 3700, model: 3700, date: "2025-03-28" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 31.5, min: 4100, max: 4340, model: 4100, date: "2025-03-29" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 23.97, min: 3030, max: 4450, model: 4400, date: "2025-04-02" },
+            { district: "Ujjain", mandi: "Tarana", variety: "Soyabeen", arrival: 10.04, min: 2352, max: 4412, model: 4412, date: "2025-04-03" },
+
+            // <!-- indore goutampura onion -->
+            { district: "Indore", mandi: "Gautampura", variety: "Onion", arrival: 26, min: 200, max: 600, model: 600, date: "2025-03-08" },
+            { district: "Indore", mandi: "Gautampura", variety: "Onion", arrival: 8.57, min: 300, max: 300, model: 300, date: "2025-03-22" },
+            { district: "Indore", mandi: "Gautampura", variety: "Onion", arrival: 32.32, min: 300, max: 700, model: 700, date: "2025-03-26" },
+
+            // <!-- ujjain karchod soyabean -->
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 25.86, min: 3391, max: 4080, model: 3550, date: "2025-03-01" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 45.28, min: 3400, max: 3997, model: 3997, date: "2025-03-03" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: null, min: 3800, max: 3800, model: 3800, date: "2025-03-03" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 55.89, min: 3021, max: 3951, model: 3850, date: "2025-03-04" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 47.61, min: 3500, max: 3968, model: 3968, date: "2025-03-05" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 65.59, min: 3370, max: 3987, model: 3861, date: "2025-03-06" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 35.52, min: 3191, max: 4010, model: 4010, date: "2025-03-07" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 7.68, min: 3600, max: 3853, model: 3853, date: "2025-03-13" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 10.53, min: 3600, max: 3926, model: 3926, date: "2025-03-17" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 19.51, min: 3600, max: 3996, model: 3966, date: "2025-03-18" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 28, min: 3301, max: 4026, model: 3900, date: "2025-03-20" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 23.69, min: 3000, max: 4059, model: 3700, date: "2025-03-21" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 192.06, min: 3011, max: 4044, model: 3570, date: "2025-03-24" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 29.66, min: 3301, max: 4076, model: 3560, date: "2025-03-25" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 229.25, min: 2700, max: 4081, model: 3750, date: "2025-03-26" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 81.27, min: 1200, max: 4145, model: 3951, date: "2025-03-27" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 36.83, min: 3200, max: 4492, model: 4444, date: "2025-04-02" },
+            { district: "Ujjain", mandi: "Khachrod", variety: "Soyabeen", arrival: 28.94, min: 3941, max: 4361, model: 4361, date: "2025-04-03" },
+
+            // <!-- bhopal bhopal maize -->
+            { district: "Bhopal", variety: "Maize", arrival: 0.21, min: 2200, max: 2200, model: 2200, date: "2025-03-01" },
+            { district: "Bhopal", variety: "Maize", arrival: 1.57, min: 2225, max: 2225, model: 2225, date: "2025-03-03" },
+            { district: "Bhopal", variety: "Maize", arrival: 1.57, min: 1901, max: 2090, model: 2090, date: "2025-03-03" },
+            { district: "Bhopal", variety: "Maize", arrival: 0.1, min: 2075, max: 2075, model: 2075, date: "2025-03-04" },
+            { district: "Bhopal", variety: "Maize", arrival: 1.1, min: 2250, max: 2250, model: 2250, date: "2025-03-29" },
+
+            //   <!-- indore indore jowar -->
+            { district: "Indore", variety: "Jowar", group: "Cereals", arrival: 1.39, min: 2426, max: 2426, model: 2426, date: "2025-03-21" },
+
+            //indore goutampura soyabean
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 94.02, min: 3885, max: 4130, model: 4130, date: "2025-03-01" },
+            { district: "Indore", mandi: "Gautampura", variety: "soyabeen", arrival: 94.02, min: 3520, max: 4060, model: 4060, date: "2025-03-01" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 3.67, min: 3983, max: 3983, model: 3983, date: "2025-03-02" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 67.28, min: 2929, max: 4022, model: 3511, date: "2025-03-03" },
+            { district: "Indore", mandi: "Gautampura", variety: "soyabeen", arrival: 67.28, min: 3941, max: 4050, model: 4050, date: "2025-03-03" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 41.52, min: 3966, max: 3966, model: 3966, date: "2025-03-04" },
+            { district: "Indore", mandi: "Gautampura", variety: "soyabeen", arrival: 41.52, min: 3740, max: 3940, model: 3900, date: "2025-03-04" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 78.43, min: 3850, max: 3975, model: 3975, date: "2025-03-05" },
+            { district: "Indore", mandi: "Gautampura", variety: "soyabeen", arrival: 78.43, min: 3740, max: 3990, model: 3990, date: "2025-03-05" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 99.57, min: 3726, max: 4100, model: 4100, date: "2025-03-06" },
+            { district: "Indore", mandi: "Gautampura", variety: "soyabeen", arrival: 99.57, min: 3805, max: 4030, model: 4030, date: "2025-03-06" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 56.96, min: 3750, max: 4026, model: 4026, date: "2025-03-07" },
+            { district: "Indore", mandi: "Gautampura", variety: "soyabeen", arrival: 56.96, min: 3850, max: 4025, model: 4025, date: "2025-03-07" },
+            { district: "Indore", mandi: "Gautampura", variety: "soyabeen", arrival: 30.16, min: 3775, max: 3970, model: 3970, date: "2025-03-08" },
+            { district: "Indore", mandi: "Gautampura", variety: "soyabeen", arrival: 30.67, min: 3580, max: 3950, model: 3950, date: "2025-03-09" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 45.69, min: 3910, max: 4025, model: 4025, date: "2025-03-10" },
+            { district: "Indore", mandi: "Gautampura", variety: "soyabeen", arrival: 45.69, min: 3700, max: 3970, model: 3970, date: "2025-03-10" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 43.56, min: 3650, max: 3970, model: 3970, date: "2025-03-11" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 68.91, min: 3781, max: 3925, model: 3925, date: "2025-03-12" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soybean-Organic", arrival: 68.91, min: 3800, max: 3900, model: 3900, date: "2025-03-12" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 114.56, min: 3910, max: 4025, model: 4005, date: "2025-03-13" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 18.53, min: 4001, max: 4010, model: 4010, date: "2025-03-14" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 19.1, min: 4000, max: 4011, model: 4011, date: "2025-03-15" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 23.73, min: 3975, max: 4015, model: 4005, date: "2025-03-16" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 115.18, min: 3850, max: 4021, model: 4001, date: "2025-03-17" },
+            { district: "Indore", mandi: "Gautampura", variety: "soyabeen", arrival: 115.18, min: 3776, max: 3881, model: 3881, date: "2025-03-17" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 13.79, min: 2251, max: 3975, model: 3800, date: "2025-03-18" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: null, min: 3800, max: 3800, model: 3800, date: "2025-03-18" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 3.33, min: 3893, max: 3893, model: 3893, date: "2025-03-21" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 1.96, min: 4000, max: 4000, model: 4000, date: "2025-03-22" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 6.96, min: 3800, max: 4000, model: 4000, date: "2025-03-24" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 46.12, min: 3700, max: 4000, model: 3700, date: "2025-03-25" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 0.54, min: 4000, max: 4000, model: 4000, date: "2025-03-26" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 1.97, min: 3966, max: 3966, model: 3966, date: "2025-03-27" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 8, min: 4000, max: 4000, model: 4000, date: "2025-03-28" },
+            { district: "Indore", mandi: "Gautampura", variety: "Soyabeen", arrival: 18.62, min: 3940, max: 4100, model: 4100, date: "2025-03-29" },
+            
+
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const totalArrivalSpan = document.getElementById('total-arrival');
+            const tableBody = document.getElementById('data-table');
+            let currentSortColumn = null;
+            let isSortAscending = true;
+
+            // Function to format date as DD/MM/YYYY
+            function formatDate(date) {
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+            }
+
+            // Function to calculate total arrival
+            function calculateTotalArrival(data) {
+                let totalArrival = data.reduce((sum, item) => sum + item.arrivals, 0);
+                totalArrivalSpan.textContent = totalArrival.toFixed(2);
+            }
+
+            // Function to apply filters and render table
+            function applyFiltersAndRender() {
+                const selectedDistrict = getQueryParam('district');
+                const selectedMandi = getQueryParam('mandi');
+                const selectedCrop = getQueryParam('crop');
+                const selectedDate = getQueryParam('date');
+
+                let filteredData = data.filter(item => {
+                    const dateObj = new Date(item.date);
+                    const formattedDate = formatDate(dateObj);
+
+                    let dateMatches = true;
+                    if (selectedDate) {
+                        dateMatches = formattedDate === formatDate(new Date(selectedDate));
+                    }
+
+                    return (
+                        (!selectedDistrict || item.district === selectedDistrict) &&
+                        (!selectedMandi || item.mandi === selectedMandi) &&
+                        (!selectedCrop || item.variety === selectedCrop) &&
+                        dateMatches
+                    );
+                });
+                
+                if (currentSortColumn) {
+                    filteredData = sortTableData(filteredData, currentSortColumn, isSortAscending);
+                }
+
+                renderTable(filteredData);
+                calculateTotalArrival(filteredData);
+            }
+
+            // Function to render table (removed price trend)
+            function renderTable(tableData) {
+                tableBody.innerHTML = '';
+                tableData.forEach(item => {
+                    const row = document.createElement('tr');
+                    const dateObj = new Date(item.date);
+                    const formattedDate = formatDate(dateObj);
+                    
+                    row.innerHTML = `
+                        <td>${formattedDate}</td>
+                        <td>${item.district}</td>
+                        <td>${item.mandi}</td>
+                        <td>${item.variety}</td>
+                        <td>${item.arrivals.toFixed(2)}</td>
+                        <td>₹${item.min}</td>
+                        <td>₹${item.max}</td>
+                        <td>₹${item.modal}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            function sortTable(columnName) {
+                if (currentSortColumn === columnName) {
+                    isSortAscending = !isSortAscending;
+                } else {
+                    currentSortColumn = columnName;
+                    isSortAscending = true;
+                }
+                
+                // Update sort indicators
+                document.querySelectorAll('th').forEach(th => {
+                    th.classList.remove('sort-asc', 'sort-desc');
+                });
+                
+                const header = document.querySelector(`th:nth-child(${getColumnIndex(columnName) + 1})`);
+                header.classList.add(isSortAscending ? 'sort-asc' : 'sort-desc');
+        
+                const sortedData = sortTableData([...data], columnName, isSortAscending);
+                renderTable(sortedData);
+            }
+            
+            function getColumnIndex(columnName) {
+                const columns = ['date', 'district', 'mandi', 'variety', 'arrivals', 'min', 'max', 'modal'];
+                return columns.indexOf(columnName);
+            }
+        
+            function sortTableData(dataArray, columnName, isAscending) {
+                return dataArray.sort((a, b) => {
+                    let comparison = 0;
+                    if (columnName === 'date') {
+                        const dateA = new Date(a.date);
+                        const dateB = new Date(b.date);
+                        comparison = dateA - dateB;
+                    } else if (typeof a[columnName] === 'number') {
+                        comparison = a[columnName] - b[columnName];
+                    } else {
+                        comparison = String(a[columnName]).MaizeeCompare(String(b[columnName]));
+                    }
+        
+                    return isAscending ? comparison : -comparison;
+                });
+            }
+
+            // Function to get query parameters from URL
+            function getQueryParam(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            }
+
+            applyFiltersAndRender();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results - KrishiMitr</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: #f9f9f9;
+      color: #191818;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .search-header {
+      padding: 5rem 2rem 3rem;
+      background: linear-gradient(135deg, rgb(26, 42, 56), rgb(38, 82, 112));
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .search-header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 70%);
+    }
+    
+    .search-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 5rem;
+      font-weight: 800;
+      line-height: 1;
+      color: white;
+      text-transform: capitalize;
+      margin-bottom: 0.5rem;
+      letter-spacing: -2px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: enterAnimation 1s cubic-bezier(0.23, 1, 0.32, 1) 0.3s forwards;
+    }
+    
+    .search-subtitle {
+      font-size: 1.3rem;
+      color: rgba(255,255,255,0.85);
+      font-weight: 400;
+      max-width: 600px;
+      line-height: 1.5;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: enterAnimation 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.5s forwards;
+    }
+    
+    @keyframes enterAnimation {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .results-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+    }
+    
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: -2rem;
+    }
+    
+    .result-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0,0,0,0.05);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: enterAnimation 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    
+    .result-card:nth-child(1) { animation-delay: 0.7s; }
+    .result-card:nth-child(2) { animation-delay: 0.8s; }
+    .result-card:nth-child(3) { animation-delay: 0.9s; }
+    
+    .result-card:hover {
+      transform: translateY(-8px) !important;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+    
+    .result-image {
+      height: 200px;
+      background: linear-gradient(45deg, #f5f7fa, #e4e8eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .result-content {
+      padding: 2rem;
+    }
+    
+    .result-heading {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #191818;
+      font-weight: 600;
+    }
+    
+    .result-details {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+    
+    .result-price {
+      font-size: 2.2rem;
+      color: #43a047;
+      font-weight: 700;
+      margin: 1.5rem 0;
+      letter-spacing: -1px;
+    }
+    
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 3rem 0 1rem;
+      padding: 1rem 2rem;
+      background: #191818;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .back-button:hover {
+      background: #333;
+      transform: translateX(-5px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+    
+    @media (max-width: 768px) {
+      .search-title {
+        font-size: 3.2rem;
+      }
+      
+      .search-header {
+        padding: 3rem 1.5rem 2rem;
+      }
+      
+      .results-container {
+        padding: 0 1.5rem 2rem;
+      }
+      
+      .result-image {
+        height: 160px;
+        font-size: 4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="search-header">
+    <h1 class="search-title" id="crop-title">Wheat</h1>
+    <p class="search-subtitle">Current market prices and agricultural insights across India</p>
+  </div>
+  
+  <div class="results-container">
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-image" id="crop-icon">🌾</div>
+        <div class="result-content">
+          <h2 class="result-heading">Market Overview</h2>
+          <div class="result-price" id="avg-price">₹2,150/quintal</div>
+          <p class="result-details">Current average market price across major mandis. Prices updated every Day from official APMC sources.</p>
+        </div>
+      </div>
+      
+      <div class="result-card">
+        <div class="result-image">📈</div>
+        <div class="result-content">
+          <h2 class="result-heading">Price Trends</h2>
+          <div class="result-price">+5.8% this month</div>
+          <p class="result-details">Prices rising due to increased export demand. Expected to stabilize in coming weeks as new harvest arrives.</p>
+        </div>
+      </div>
+      
+      <div class="result-card">
+        <div class="result-image">📍</div>
+        <div class="result-content">
+          <h2 class="result-heading">Best Markets</h2>
+          <p class="result-details">Highest paying mandis for this commodity:</p>
+          <ul style="margin-top: 1rem; color: #555; line-height: 1.8; list-style-type: none;">
+            <li>• Indore APMC: ₹2,300</li>
+            <li>• Bhopal Main: ₹2,250</li>
+            <li>• Ujjain: ₹2,200</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      <a href="website.html" class="back-button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Search
+      </a>
+    </div>
+  </div>
+  
+  <script>
+  // Define comprehensive crop data
+const cropData = {
+  'wheat': {
+    icon: '🌾',
+    price: '3,836.64',
+    trend: '+5.19%',
+    trendDirection: 'rising',
+    reason: 'increased export demand',
+    topMarkets: [
+      { name: 'Indore APMC', price: '2,300' },
+      { name: 'Bhopal Main', price: '2,250' },
+      { name: 'Ujjain', price: '2,200' }
+    ]
+  },
+  'rice': {
+    icon: '🍚',
+    price: '3,474',
+    trend: '-13.93%',
+    trendDirection: 'rising',
+    reason: 'seasonal demand and limited supply',
+    topMarkets: [
+      { name: 'Kolkata APMC', price: '3,600' },
+      { name: 'Burdwan Mandi', price: '3,550' },
+      { name: 'Patna Central', price: '3,500' }
+    ]
+  },
+  'tomato': {
+    icon: '🍅',
+    price: '475',
+    trend: '+22.5%',
+    trendDirection: 'rising',
+    reason: 'increased supply from southern states',
+    topMarkets: [
+      { name: 'Kolar Market', price: '1,400' },
+      { name: 'Nashik APMC', price: '1,350' },
+      { name: 'Bangalore Market', price: '1,300' }
+    ]
+  },
+  'soyabeen': { 
+    icon: '🫘',
+    price: '4,230',
+    trend: '+3.2%',
+    trendDirection: 'rising',
+    reason: 'growing demand for plant-based proteins',
+    topMarkets: [
+      { name: 'Indore APMC', price: '4,350' },
+      { name: 'Ujjain Mandi', price: '4,300' },
+      { name: 'Dewas Market', price: '4,250' }
+    ]
+  },
+  'potato': {
+    icon: '🥔',
+    price: '750',
+    trend: '-2.3%',
+    trendDirection: 'falling',
+    reason: 'bumper harvest in northern states',
+    topMarkets: [
+      { name: 'Agra APMC', price: '1,950' },
+      { name: 'Kanpur Mandi', price: '1,900' },
+      { name: 'Jalandhar Market', price: '1,880' }
+    ]
+  },
+  'jowar': {
+    icon: '🌾',
+    price: '2,225',
+    trend: '+0.5%',
+    trendDirection: 'rising',
+    reason: 'growing interest in millet-based foods',
+    topMarkets: [
+      { name: 'Solapur APMC', price: '2,650' },
+      { name: 'Latur Mandi', price: '2,600' },
+      { name: 'Gulbarga Market', price: '2,580' }
+    ]
+  },
+  'sugarcane': {
+    icon: '🎋',
+    price: '307.5',
+    trend: '-2.4%',
+    trendDirection: 'stable',
+    reason: 'government price controls and steady demand',
+    topMarkets: [
+      { name: 'Muzaffarnagar APMC', price: '3,050' },
+      { name: 'Pune Mandi', price: '3,000' },
+      { name: 'Kolhapur Market', price: '2,980' }
+    ]
+  },
+  'onion': {
+    icon: '🧅',
+    price: '2.839',
+    trend: '-20%',
+    trendDirection: 'rising sharply',
+    reason: 'reduced acreage and rainfall issues',
+    topMarkets: [
+      { name: 'Nashik APMC', price: '1,900' },
+      { name: 'Lasalgaon Mandi', price: '1,850' },
+      { name: 'Pune Market', price: '1,800' }
+    ]
+  },
+  'groundnut': {
+    icon: '🥜',
+    price: '4,698',
+    trend: '+18.5%',
+    trendDirection: 'rising',
+    reason: 'strong export demand and lower production',
+    topMarkets: [
+      { name: 'Rajkot APMC', price: '5,900' },
+      { name: 'Junagadh Mandi', price: '5,850' },
+      { name: 'Gondal Market', price: '5,800' }
+    ]
+  },
+  'cotton': {
+    icon: '🧶',
+    price: '6,300',
+    trend: '-10.1%',
+    trendDirection: 'slightly falling',
+    reason: 'international market pressure and increased imports',
+    topMarkets: [
+      { name: 'Guntur APMC', price: '6,450' },
+      { name: 'Adilabad Mandi', price: '6,400' },
+      { name: 'Jalgaon Market', price: '6,380' }
+    ]
+  },
+  'maize': {
+    icon: '🌽',
+    price: '2,232',
+    trend: '+2.7%',
+    trendDirection: 'rising',
+    reason: 'increased demand from poultry industry',
+    topMarkets: [
+      { name: 'Davangere APMC', price: '2,050' },
+      { name: 'Haveri Mandi', price: '2,000' },
+      { name: 'Ranchi Market', price: '1,980' }
+    ]
+  }
+};
+
+// Function to get search query from URL
+function getSearchQuery() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('q') || 'wheat'; // Use 'q' parameter (from your search bar code)
+}
+
+// Function to check if a search query is valid
+function isValidCrop(query) {
+  // First check for exact match
+  if (cropData[query]) {
+    return true;
+  }
+  
+  // Then check for fuzzy match
+  for (const crop in cropData) {
+    if (crop.includes(query) || query.includes(crop)) {
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+// Main function to update the page content based on the search query
+function updateSearchResults() {
+  // Get the search query from URL
+  const searchQuery = getSearchQuery().toLowerCase();
+  
+  // Check if the search query is valid
+  if (!isValidCrop(searchQuery)) {
+    // Show alert for invalid search keyword
+    alert("Please enter a valid crop name. Available crops include: " + 
+          Object.keys(cropData).join(", ") + ".");
+    
+    // Optional: Redirect to default crop (wheat)
+    window.location.href = window.location.pathname + "?q=wheat";
+    return;
+  }
+  
+  // Find the crop data (do a fuzzy match if needed)
+  let cropInfo = cropData[searchQuery];
+  
+  // If no exact match, try a fuzzy match
+  if (!cropInfo) {
+    for (const crop in cropData) {
+      if (crop.includes(searchQuery) || searchQuery.includes(crop)) {
+        cropInfo = cropData[crop];
+        break;
+      }
+    }
+  }
+  
+  // Format the search query for display (capitalize first letter)
+  const formattedQuery = searchQuery.charAt(0).toUpperCase() + searchQuery.slice(1);
+  
+  // Update page title
+  document.title = `${formattedQuery} - KrishiMitr`;
+  
+  // Update page content
+  document.getElementById('crop-title').textContent = formattedQuery;
+  document.getElementById('crop-icon').textContent = cropInfo.icon;
+  document.getElementById('avg-price').textContent = `₹${cropInfo.price}/quintal`;
+  
+  // Update price trend
+  const trendElement = document.querySelector('.result-card:nth-child(2) .result-price');
+  trendElement.textContent = cropInfo.trend + ' this month';
+  
+  // Update price details
+  const trendDetailsElement = document.querySelector('.result-card:nth-child(2) .result-details');
+  trendDetailsElement.textContent = `Prices ${cropInfo.trendDirection} due to ${cropInfo.reason}. Expected to stabilize in coming weeks as market adjusts.`;
+  
+  // Update top markets
+  const marketsList = document.querySelector('.result-card:nth-child(3) ul');
+  marketsList.innerHTML = '';
+  cropInfo.topMarkets.forEach(market => {
+    const li = document.createElement('li');
+    li.style.marginBottom = '0.5rem';
+    li.innerHTML = `• ${market.name}: ₹${market.price}`;
+    marketsList.appendChild(li);
+  });
+}
+
+// Initialize the page when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  updateSearchResults();
+});
+  </script>
+</body>
+</html>

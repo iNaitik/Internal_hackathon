@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APMC Market Report - Filter Selection</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 20px 0; }
+        select, input[type="date"] { padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        .btn { background: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>APMC Market Report - Filter Selection</h1>
+
+    <!-- Filters Section -->
+    <div class="filters">
+        <select id="district-filter">
+            <option value="all">All Districts</option>
+            <option value="Bhopal">Bhopal</option>
+            <option value="Indore">Indore</option>
+            <option value="Ujjain">Ujjain</option>
+            <option value="Gwalior">gwalior</option>
+            <option value="jabalpur">Jabalpur</option>
+        </select>
+
+        <select id="mandi-filter">
+            <option value="all">All Mandis</option>
+        </select>
+
+        <select id="crop-filter">
+            <option value="all">All Crops</option>
+            <option value="Wheat">Wheat</option>
+            <option value="Rice">Rice</option>
+            <option value="Tomato">Tomato</option>
+            <option value="Soybean">Soybean</option>
+            <option value="Potato">Potato</option>
+            <option value="Jowar">Jowar</option>
+            <option value="Sugarcane">Sugarcane</option>
+            <option value="Onion">Onion</option>
+            <option value="Groundnut">Groundnut</option>
+            <option value="Cotton">Cotton</option>
+            <option value="Maize">Maize</option>
+            
+        </select>
+        
+
+        <input type="date" id="date-filter" min="2025-03-01" max="2025-04-03">
+        <button class="btn" id="enter-button">Enter</button>
+    </div>
+
+    <script>
+        document.getElementById('enter-button').addEventListener('click', function() {
+            const district = document.getElementById('district-filter').value;
+            const mandi = document.getElementById('mandi-filter').value;
+            const crop = document.getElementById('crop-filter').value;
+            const date = document.getElementById('date-filter').value;
+
+            // Construct the URL with query parameters
+            let url = 'report.html?';
+            if (district !== 'all') url += 'district=' + district + '&';
+            if (mandi !== 'all') url += 'mandi=' + mandi + '&';
+            if (crop !== 'all') url += 'crop=' + crop + '&';
+            if (date) url += 'date=' + date;
+
+            // Redirect to the report page
+            window.location.href = url;
+        });
+
+        document.getElementById('district-filter').addEventListener('change', function() {
+            const district = this.value;
+            const mandiFilter = document.getElementById('mandi-filter');
+            mandiFilter.innerHTML = '<option value="all">All Mandis</option>';
+
+            if (district !== 'all') {
+                const mandiMapping = {
+                    'Bhopal': ['Bhopal','berasia'],
+                    'Indore': ['Indore','Mhow','sanwer','gautampura'],
+                    'Ujjain': ['Ujjain','Badnagar','Nagda','tarana'],
+                    'Gwalior': ['Gwalior','dabra','Laskar'],
+                    'Jabalpur': ['Jabalpur','Patan','Sihora',]
+                    
+                };
+                mandiMapping[district].forEach(mandi => {
+                    const option = document.createElement('option');
+                    option.value = mandi;
+                    option.textContent = mandi;
+                    mandiFilter.appendChild(option);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

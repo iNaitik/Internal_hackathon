@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP Agriculture Schemes | Rural Development</title>
+    <style>
+        :root {
+            --primary-color: rgb(26, 42, 56);
+            --secondary-color: rgb(52, 152, 219);
+            --light-color: rgb(236, 240, 241);
+            --accent-color: rgb(46, 204, 113);
+            --agriculture-green: #27ae60;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll during animations */
+        }
+        
+        /* Animation Keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Apply animations to elements */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            background-image: linear-gradient(to right, var(--primary-color), #1a3a4a);
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        /* New header layout styles */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .site-title {
+            display: flex;
+            align-items: center;
+            animation: slideInFromLeft 1s ease-out forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+        
+        .site-title h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-align: left;
+        }
+        
+        .navigation {
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+        
+        .navigation ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navigation li {
+            margin-left: 25px;
+        }
+        
+        .navigation a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .navigation a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .tagline {
+            font-style: italic;
+            margin-top: 0.5rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: 0.4s;
+            text-align: left;
+        }
+        
+        .scheme-filter {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 30px 0;
+            border-top: 4px solid var(--agriculture-green);
+            opacity: 0;
+            animation: scaleIn 1s ease-out forwards;
+            animation-delay: 0.6s;
+        }
+        
+        .scheme-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 3px solid var(--agriculture-green);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .schemes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        /* Add animation delay to each card sequentially */
+        .schemes-container .scheme-card:nth-child(1) { animation-delay: 0.8s; }
+        .schemes-container .scheme-card:nth-child(2) { animation-delay: 0.9s; }
+        .schemes-container .scheme-card:nth-child(3) { animation-delay: 1.0s; }
+        .schemes-container .scheme-card:nth-child(4) { animation-delay: 1.1s; }
+        .schemes-container .scheme-card:nth-child(5) { animation-delay: 1.2s; }
+        .schemes-container .scheme-card:nth-child(6) { animation-delay: 1.3s; }
+        .schemes-container .scheme-card:nth-child(7) { animation-delay: 1.4s; }
+        .schemes-container .scheme-card:nth-child(8) { animation-delay: 1.5s; }
+        .schemes-container .scheme-card:nth-child(9) { animation-delay: 1.6s; }
+        .schemes-container .scheme-card:nth-child(10) { animation-delay: 1.7s; }
+        .schemes-container .scheme-card:nth-child(11) { animation-delay: 1.8s; }
+        .schemes-container .scheme-card:nth-child(12) { animation-delay: 1.9s; }
+        
+        .scheme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 50px;
+            font-size: 0.9rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 2s;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        .scheme-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+        }
+        
+        .scheme-type {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .national {
+            background-color: var(--secondary-color);
+        }
+        
+        .state {
+            background-color: var(--accent-color);
+        }
+        
+        .scheme-title {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+        
+        .scheme-body {
+            padding: 20px;
+        }
+        
+        .scheme-detail {
+            margin-bottom: 12px;
+            display: flex;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            min-width: 100px;
+        }
+        
+        .scheme-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 15px;
+            background-color: var(--agriculture-green);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .scheme-link:hover {
+            background-color: #219653;
+        }
+        
+        .agriculture-icon {
+            color: var(--agriculture-green);
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .navigation {
+                margin-top: 15px;
+                width: 100%;
+            }
+            
+            .navigation ul {
+                justify-content: space-between;
+            }
+            
+            .navigation li {
+                margin-left: 0;
+            }
+            
+            .schemes-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .scheme-detail {
+                flex-direction: column;
+            }
+            
+            .detail-label {
+                margin-bottom: 3px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="site-title">
+                <h1><i class="fas fa-tractor agriculture-icon"></i>Madhya Pradesh Agriculture Schemes</h1>
+            </div>
+            <nav class="navigation">
+                <ul>
+                    <li><a href="website.html">Home</a></li>
+                    <li><a href="About-us.html">About Us</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="container">
+            <p class="tagline">All government schemes for farmers and agriculture development in MP</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="scheme-filter">
+            <h2><i class="fas fa-filter agriculture-icon"></i>Filter Schemes</h2>
+            <div class="filter-options">
+                <div class="filter-group">
+                    <label for="scheme-type"><i class="fas fa-flag agriculture-icon"></i>Scheme Type</label>
+                    <select id="scheme-type">
+                        <option value="all">All Schemes</option>
+                        <option value="national">National Schemes</option>
+                        <option value="state">State Schemes</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="category"><i class="fas fa-tag agriculture-icon"></i>Category</label>
+                    <select id="category">
+                        <option value="all">All Categories</option>
+                        <option value="financial">Financial Support</option>
+                        <option value="insurance">Crop Insurance</option>
+                        <option value="irrigation">Irrigation</option>
+                        <option value="equipment">Equipment/Subsidy</option>
+                        <option value="organic">Organic Farming</option>
+                        <option value="horticulture">Horticulture</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="search"><i class="fas fa-search agriculture-icon"></i>Search</label>
+                    <input type="text" id="search" placeholder="Search schemes...">
+                </div>
+            </div>
+        </div>
+        
+        <div class="schemes-container">
+            <!-- National Agriculture Schemes -->
+            <div class="scheme-card" data-type="national" data-category="financial">
+                <div class="scheme-header">
+                    <span class="scheme-type national">National Scheme</span>
+                    <h3 class="scheme-title">Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> ₹6,000/year direct transfer
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Eligibility:</span> Small & marginal farmers (up to 2 hectares)
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">MP Status:</span> 75+ lakh beneficiaries enrolled
+                    </div>
+                    <a href="https://pmkisan.gov.in/" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Official Website</a>
+                </div>
+            </div>
+            
+            <div class="scheme-card" data-type="national" data-category="insurance">
+                <div class="scheme-header">
+                    <span class="scheme-type national">National Scheme</span>
+                    <h3 class="scheme-title">Pradhan Mantri Fasal Bima Yojana (PMFBY)</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> Crop insurance against natural calamities
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Premium:</span> 2% (Kharif), 1.5% (Rabi), 5% (Commercial crops)
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">MP Coverage:</span> 45+ lakh farmers insured
+                    </div>
+                    <a href="https://pmfby.gov.in/" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Official Website</a>
+                </div>
+            </div>
+            
+            <div class="scheme-card" data-type="national" data-category="irrigation">
+                <div class="scheme-header">
+                    <span class="scheme-type national">National Scheme</span>
+                    <h3 class="scheme-title">Pradhan Mantri Krishi Sinchai Yojana (PMKSY)</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> Micro-irrigation infrastructure development
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Components:</span> Accelerated Irrigation Benefit, Har Khet Ko Pani
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">MP Impact:</span> 5.8 lakh hectares covered under micro-irrigation
+                    </div>
+                    <a href="https://pmksy.gov.in/" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Official Website</a>
+                </div>
+            </div>
+            
+            <div class="scheme-card" data-type="national" data-category="equipment">
+                <div class="scheme-header">
+                    <span class="scheme-type national">National Scheme</span>
+                    <h3 class="scheme-title">Agriculture Mechanization (SMAM)</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> 40-50% subsidy on farm equipment
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Eligibility:</span> Individual farmers, FPOs, SHGs
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">MP Focus:</span> Custom Hiring Centers promoted
+                    </div>
+                    <a href="https://agricoop.gov.in/sites/default/files/SMAM_Guidelines_2021.pdf" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Scheme Guidelines</a>
+                </div>
+            </div>
+            
+            <!-- State Agriculture Schemes -->
+            <div class="scheme-card" data-type="state" data-category="financial">
+                <div class="scheme-header">
+                    <span class="scheme-type state">State Scheme</span>
+                    <h3 class="scheme-title">Mukhyamantri Kisan Kalyan Yojana</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> Additional ₹4,000/year to PM-KISAN beneficiaries
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Total Support:</span> ₹10,000/year (₹6,000 PM-KISAN + ₹4,000 State)
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">MP Budget:</span> ₹3,600 crore allocated
+                    </div>
+                    <a href="https://mpkisan.gov.in/" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Official Website</a>
+                </div>
+            </div>
+            
+            <div class="scheme-card" data-type="state" data-category="organic">
+                <div class="scheme-header">
+                    <span class="scheme-type state">State Scheme</span>
+                    <h3 class="scheme-title">MP Organic Farming Scheme</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> ₹10,000/acre for 3 years for conversion
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Target:</span> 5,000 farmers annually to adopt organic farming
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Certification:</span> Support for organic certification costs
+                    </div>
+                    <a href="https://mpkrishi.mp.gov.in/" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Agriculture Portal</a>
+                </div>
+            </div>
+            
+            <div class="scheme-card" data-type="state" data-category="horticulture">
+                <div class="scheme-header">
+                    <span class="scheme-type state">State Scheme</span>
+                    <h3 class="scheme-title">Mukhyamantri Bagan Yojana</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> 50% subsidy (max ₹50,000) for orchard development
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Crops:</span> Mango, guava, lemon, amla, pomegranate etc.
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Area:</span> 1-5 acre orchard development supported
+                    </div>
+                    <a href="https://horticulture.mp.gov.in/" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Horticulture Dept</a>
+                </div>
+            </div>
+            
+            <div class="scheme-card" data-type="state" data-category="irrigation">
+                <div class="scheme-header">
+                    <span class="scheme-type state">State Scheme</span>
+                    <h3 class="scheme-title">Jalodaya Yojana</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> Solar pumps & micro-irrigation support
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Components:</span> 75% subsidy for SC/ST, 55% for others
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Target:</span> 25,000 solar pumps installed annually
+                    </div>
+                    <a href="https://phed.mp.gov.in/" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Water Resources Dept</a>
+                </div>
+            </div>
+            
+            <div class="scheme-card" data-type="state" data-category="financial">
+                <div class="scheme-header">
+                    <span class="scheme-type state">State Scheme</span>
+                    <h3 class="scheme-title">Krishak Samriddhi Yojana</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> Interest-free loans up to ₹1 lakh
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Eligibility:</span> All small and marginal farmers in MP
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Repayment:</span> Flexible options linked to harvest seasons
+                    </div>
+                    <a href="https://mpkrishi.mp.gov.in/" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Agriculture Portal</a>
+                </div>
+            </div>
+            
+            <div class="scheme-card" data-type="national" data-category="organic">
+                <div class="scheme-header">
+                    <span class="scheme-type national">National Scheme</span>
+                    <h3 class="scheme-title">Paramparagat Krishi Vikas Yojana (PKVY)</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> ₹50,000/acre for 3 years for cluster farming
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">MP Clusters:</span> 500+ clusters established
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Focus:</span> Traditional knowledge + modern techniques
+                    </div>
+                    <a href="https://pgsindia-ncof.gov.in/PKVY/index.aspx" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Scheme Portal</a>
+                </div>
+            </div>
+            
+            <div class="scheme-card" data-type="state" data-category="equipment">
+                <div class="scheme-header">
+                    <span class="scheme-type state">State Scheme</span>
+                    <h3 class="scheme-title">Farm Machinery Subsidy Scheme</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> 40-60% subsidy on tractors, harvesters etc.
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Priority:</span> Women farmers get additional 10% subsidy
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">MP Focus:</span> Promoting custom hiring centers
+                    </div>
+                    <a href="https://mpagrisnet.gov.in/" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Agriculture Dept</a>
+                </div>
+            </div>
+            
+            <div class="scheme-card" data-type="national" data-category="horticulture">
+                <div class="scheme-header">
+                    <span class="scheme-type national">National Scheme</span>
+                    <h3 class="scheme-title">Mission for Integrated Development of Horticulture (MIDH)</h3>
+                </div>
+                <div class="scheme-body">
+                    <div class="scheme-detail">
+                        <span class="detail-label">Benefit:</span> 50-85% subsidy for horticulture development
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">MP Focus:</span> Mango, guava, garlic, onion, flowers
+                    </div>
+                    <div class="scheme-detail">
+                        <span class="detail-label">Impact:</span> 3.5 lakh hectares under horticulture in MP
+                    </div>
+                    <a href="https://midh.gov.in/" class="scheme-link" target="_blank"><i class="fas fa-external-link-alt"></i> Official Website</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 Madhya Pradesh Agriculture Schemes Portal | For Farmer Welfare</p>
+            <p>Contact: Krishi-Mitra | Phone: 0755-3647239-373</p>
+        </div>
+    </footer>
+
+    <script>
+        // Enhanced filtering functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const schemeTypeFilter = document.getElementById('scheme-type');
+            const categoryFilter = document.getElementById('category');
+            const searchFilter = document.getElementById('search');
+            const schemeCards = document.querySelectorAll('.scheme-card');
+            
+            function filterSchemes() {
+                const typeValue = schemeTypeFilter.value;
+                const categoryValue = categoryFilter.value;
+                const searchValue = searchFilter.value.toLowerCase();
+                
+                schemeCards.forEach(card => {
+                    const cardType = card.getAttribute('data-type');
+                    const cardCategory = card.getAttribute('data-category');
+                    const cardTitle = card.querySelector('.scheme-title').textContent.toLowerCase();
+                    const cardDetails = card.querySelector('.scheme-body').textContent.toLowerCase();
+                    
+                    const typeMatch = typeValue === 'all' || cardType === typeValue;
+                    const categoryMatch = categoryValue === 'all' || cardCategory === categoryValue;
+                    const searchMatch = searchValue === '' || 
+                                      cardTitle.includes(searchValue) || 
+                                      cardDetails.includes(searchValue);
+                    
+                    if (typeMatch && categoryMatch && searchMatch) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Add event listeners
+            schemeTypeFilter.addEventListener('change', filterSchemes);
+            categoryFilter.addEventListener('change', filterSchemes);
+            searchFilter.addEventListener('input', filterSchemes);
+            
+            // Initialize with agriculture schemes only
+            filterSchemes();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+.map-box{
+    width: 400px;
+    height: 200px;
+    
+}
+
+.Mandla{
+    display:inline;
+    fill-opacity:1;
+    fill-rule:evenodd;
+    stroke:black;
+    stroke-width:1.5;
+    stroke-linecap:square;
+    stroke-linejoin:bevel;
+    stroke-miterlimit:9.99112;
+    stroke-dasharray:none;
+    stroke-opacity:1;
+    fill: rgb(98, 98, 98);
+    transition: 0.25s;
+}
+.Mandla:hover{
+    fill: Black;
+
+    
+}
+.Dindori{
+    display:inline;fill:rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;
+    transition: 0.25s;
+}
+.Dindori:hover{
+    fill: Black
+    
+    
+}
+.Khargone{
+    display:inline;fill:rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition:0.25s;
+}
+.Khargone:hover{
+    fill:Black
+    
+}
+
+.Khandwa{
+    display:inline; fill:rgb(98, 98, 98); fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;
+    transition: 0.25s;
+}
+.Khandwa:hover{
+    fill: Black
+}
+
+.Alirajpur{
+    display:inline;fill:rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;
+    transition: 0.25s;
+}
+.Alirajpur:hover{
+    fill: Black
+}
+.Jabalpur{
+    display:inline;fill:rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Jabalpur:hover{
+    fill: Black
+}
+
+.Barwani{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Barwani:hover{
+    fill: Black
+}
+
+.Dhar{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Dhar:hover{
+    fill: Black
+}
+
+.Jhabua{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Jhabua:hover{
+    fill:Black
+}
+
+.Balaghat{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Balaghat:hover{
+    fill:Black
+}
+
+.Betul{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Betul:hover{
+    fill:Black
+}
+
+.Burhanpur{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Burhanpur:hover{
+    fill:Black
+}
+
+.Chhindwara{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Chhindwara:hover{
+    fill:Black
+}
+
+.Katni{
+   display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Katni:hover{
+    fill:Black
+}
+
+.Dewas{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Dewas:hover{
+    fill:Black
+}
+
+.Indore{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Indore:hover{
+    fill:Black
+}
+
+.Mandsore{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Mandsore:hover{
+    fill:Black
+}
+
+.Neemuch{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Neemuch:hover{
+    fill:Black
+}
+
+.Ratlam{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Ratlam:hover{
+    fill:Black
+}
+
+.Sehore{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s; 
+}
+.Sehore:hover{
+    fill:Black     
+}
+
+.Seoni{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Seoni:hover{
+    fill:Black
+}
+
+.Ujjain{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Ujjain:hover{
+    fill:Black
+}
+
+.Bhind{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Bhind:hover{
+    fill:Black
+}
+
+.Guna{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Guna:hover{
+    fill:Black
+}
+
+.Gwalior{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Gwalior:hover{
+    fill:Black
+}
+
+.Harda{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Harda:hover{
+    fill:Black
+}
+
+.Hoshangabad{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Hoshangabad:hover{
+    fill:Black
+}
+.Morena{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Morena:hover{
+    fill: Black
+}
+.Raisen{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1;transition: 0.25s;
+}
+.Raisen:hover{
+    fill:Black
+}
+.Sheopur{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition : 0.25s;
+}
+.Sheopur:hover{
+    fill:Black
+}
+
+.Vidisha{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Vidisha:hover{
+    fill:Black
+}
+.Ashoknagar{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Ashoknagar:hover{
+    fill:Black
+}
+
+.Bhopal{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Bhopal:hover{
+    fill:Black
+}
+
+.Chhatarpur{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Chhatarpur:hover{
+    fill:Black
+}
+
+.Narsinghpur{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Narsinghpur:hover{
+    fill:Black
+}
+
+.Panna{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Panna:hover{
+    fill:Black
+}
+
+.Rajgarh{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Rajgarh:hover{
+    fill:Black
+}
+
+.Sagar{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Sagar:hover{
+    fill:Black
+}
+
+.Shajapur{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Shajapur:hover{
+    fill:Black
+}
+
+.Damoh{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition: 0.25s;
+}
+.Damoh:hover{
+    fill:Black
+}
+
+.Rewa{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Rewa:hover{
+    fill:Black
+}
+
+.Satna{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Satna:hover{
+    fill:Black
+}
+
+.Sidhi{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Sidhi:hover{
+    fill:Black
+}
+
+.Singrauli{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Singrauli:hover{
+    fill:Black
+}
+
+.Umaria{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Umaria:hover{
+    fill:Black
+}
+
+.Datia{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Datia:hover{
+    fill:Black
+}
+
+.Shivpuri{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Shivpuri:hover{
+    fill:Black
+}
+
+.Niwari{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition: 0.25s;
+}
+.Niwari:hover{
+    fill:Black
+}
+
+.Tikamgarh{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Tikamgarh:hover{
+    fill:Black
+}
+
+.Shahdol{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition: 0.25s;
+}
+.Shahdol:hover{
+    fill:Black
+}
+.Anuppur{
+    display:inline;fill: rgb(98, 98, 98);fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:9.99112;stroke-dasharray:none;stroke-opacity:1; transition:0.25s;
+}
+.Anuppur:hover{
+    fill:Black
+}
