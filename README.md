@@ -54,4 +54,6 @@ The goal of the project was to provide useful, easy-to-understand information th
 ---<img width="1920" height="1027" alt="Screenshot 2025-11-30 203452" src="https://github.com/user-attachments/assets/5db90558-a0e0-4787-ae36-6fbc8c32e611" />
 
 
-
+## How to run
+Copy all the files in VS code
+Run the live server in Website.html
